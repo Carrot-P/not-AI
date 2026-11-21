@@ -5,7 +5,7 @@ Contract version: v1 (team plan doc, section 2: https://claude.ai/artifact/FwSjU
 |---|---|---|---|---|---|
 | Celia | Engine + Tauri | Implemented; integration pending | `src/`, `Cargo.toml`, `build.rs`, `tauri.conf.json`, `tests/golden.rs`, `.github/workflows/release.yml` | Waiting for `data/`, `tests/golden/`, and the questionnaire UI | 2026-11-21 14:24 JST |
 | Xin | JP data (+ Day 2 analyzer) | doing | `data/` (+ `src/engine/analyze.rs` Day 2) | rustup install | 13:20 |
-| Zine | Frontend | doing | `frontend/` | - | 13:20 |
+| Zine | Frontend | Day 1 pushed: Compose + Output panels (scenario picker, recipient/channel, FieldMeta form w/ show_if, live compose, Why? trace, Copy, check list, inline required errors). Tested in browser w/ stub; please smoke-test in app | `frontend/` (compose.js, stub.js, style.css, main.js) | - | 2026-11-21 15:47 JST |
 | Thomas | Tests + pitch + submission | doing | `tests/golden/*.json`, `README.md`, `docs/` | - | 13:20 |
 
 ## Celia — verification

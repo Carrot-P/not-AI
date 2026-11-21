@@ -1,6 +1,8 @@
+import './stub.js';
 import { createDockview, themeLight } from 'dockview';
 import 'dockview/dist/styles/dockview.css';
 import './style.css';
+import { composePanel, outputPanel, initCompose } from './compose.js';
 
 const workspace = document.getElementById('workspace');
 const dock = createDockview(workspace, {
@@ -16,6 +18,8 @@ const dock = createDockview(workspace, {
     };
   },
   createComponent({ name }) {
+    if (name === 'compose') return composePanel();
+    if (name === 'output') return outputPanel();
     if (name === 'editor') {
       const element = document.createElement('textarea');
       element.setAttribute('aria-label', 'Text editor');
@@ -47,3 +51,12 @@ dock.addPanel({
   minimumWidth: 100,
   inactive: true,
 });
+dock.addPanel({
+  id: 'compose', component: 'compose', title: 'Compose',
+  position: { referencePanel: 'editor', direction: 'left' }, initialWidth: 340, minimumWidth: 260,
+});
+dock.addPanel({
+  id: 'output', component: 'output', title: 'Output',
+  position: { referencePanel: 'editor', direction: 'above' }, initialHeight: 420, minimumHeight: 160,
+});
+initCompose();

@@ -17,3 +17,37 @@ textarea {
   resize: none;
   font: 16px/1.5 monospace;
 }
+
+/* Compose + Output panels */
+.compose, .output { box-sizing: border-box; height: 100%; overflow: auto; padding: 12px; font: 14px/1.5 system-ui, sans-serif; }
+.compose .row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.lbl { min-width: 56px; color: #555; font-size: 12px; }
+.compose select, .compose input[type=text], .compose input[type=number] { flex: 1; width: 100%; box-sizing: border-box; padding: 5px 6px; font: inherit; }
+.seg { display: inline-flex; border: 1px solid #888; border-radius: 6px; overflow: hidden; }
+.seg button { border: 0; padding: 5px 12px; background: #fff; font: inherit; cursor: pointer; }
+.seg button + button { border-left: 1px solid #888; }
+.seg button.on { background: #1f4e9c; color: #fff; }
+.fields { border-top: 1px solid #ddd; padding-top: 10px; }
+.field { margin-bottom: 10px; }
+.field label { display: block; font-size: 12px; color: #333; margin-bottom: 2px; }
+.field.kind-toggle { display: flex; flex-direction: row-reverse; justify-content: flex-end; align-items: center; gap: 6px; }
+.field.kind-toggle label { margin: 0; font-size: 14px; }
+.field.invalid input, .field.invalid select { outline: 2px solid #c62828; }
+.ferr { color: #c62828; font-size: 12px; }
+.subject { font-weight: 600; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #ddd; }
+.subject .lbl { margin-right: 8px; }
+.msg { white-space: pre-wrap; font-size: 17px; line-height: 1.9; }
+.segment { border-radius: 3px; cursor: pointer; padding: 1px 0; }
+.segment:hover, .segment:focus { background: #fff3c4; outline: none; }
+.segment.sel { background: #ffe082; box-shadow: 0 0 0 1px #c79a00; }
+.actions { margin: 10px 0; display: flex; gap: 8px; }
+.actions button { padding: 5px 14px; font: inherit; cursor: pointer; }
+.why { background: #f4f6fa; border-left: 3px solid #1f4e9c; padding: 6px 10px; font-size: 13px; color: #333; }
+.why code { background: #e3e8f2; padding: 0 4px; border-radius: 3px; }
+.output h3 { font-size: 13px; margin: 14px 0 4px; }
+.issues { margin: 0; padding-left: 0; list-style: none; font-size: 13px; }
+.issues li { padding: 4px 6px; border-left: 3px solid #999; margin-bottom: 4px; background: #fafafa; }
+.issues .sev { font-weight: 600; text-transform: uppercase; font-size: 11px; margin-right: 6px; }
+.sev-error { border-color: #c62828 !important; } .sev-warn { border-color: #e0a000 !important; } .sev-info { border-color: #1f4e9c !important; }
+.sugg { color: #2e7d32; }
+.error { background: #fdecea; color: #8a1c1c; border: 1px solid #f5c2c0; padding: 8px 10px; border-radius: 4px; }
