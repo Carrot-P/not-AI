@@ -2,10 +2,11 @@
 import common from '../data/common.json';
 import { setEditorText, scheduleCheck } from './editor.js';
 const invoke = (cmd, args) => window.__TAURI__.core.invoke(cmd, args);
-const RECIPIENTS = [['professor', 'Professor'], ['boss', 'Boss'], ['coworker', 'Coworker']];
+// Recipients come from data/common.json so new ones (e.g. client) appear automatically.
+const RECIPIENTS = Object.entries(common.recipients ?? {}).map(([id, r]) => [id, (r.label_en ?? id).split(' /')[0]]);
 const CHANNELS = [['email', 'Email'], ['chat', 'Chat']];
 
-const state = { scenarios: [], scenario: null, recipient: 'professor', channel: 'email', lang: 'ja', fields: {}, toggles: {} };
+const state = { scenarios: [], scenario: null, recipient: 'professor', channel: 'email', lang: 'ja', fields: {}, toggles: {}, auto: {} }; // auto: key -> analyze guess that filled it
 function el(tag, { dataset, ...props } = {}, ...kids) {
   const n = Object.assign(document.createElement(tag), props);
   if (dataset) Object.assign(n.dataset, dataset);
@@ -14,6 +15,39 @@ function el(tag, { dataset, ...props } = {}, ...kids) {
 }
 
 const composeEl = el('div', { className: 'compose' });
+const formEl = el('div');
+
+// "Received message" box: analyze() guesses -> prefill the form, marking what was auto-filled.
+const receivedText = el('textarea', { className: 'received', lang: 'ja', rows: 4, placeholder: 'Paste the message you received…' });
+const receivedNote = el('div', { className: 'rnote' });
+const fillBtn = el('button', { type: 'button', textContent: 'Fill form from message' });
+fillBtn.onclick = async () => {
+  if (!receivedText.value.trim()) return;
+  try {
+    const { guesses } = await invoke('analyze', { received: receivedText.value });
+    state.auto = {};
+    const skipped = [];
+    for (const g of guesses) {
+      const key = g.field.replace(/^fields\./, '');
+      if (key === 'scenario' && !state.scenarios.some((s) => s.id === g.value)) { skipped.push(g); continue; }
+      if (key === 'recipient' && !RECIPIENTS.some(([id]) => id === g.value)) { skipped.push(g); continue; }
+      if (['scenario', 'recipient', 'channel'].includes(key)) state[key] = g.value;
+      else state.fields[key] = g.value;
+      state.auto[key] = g;
+    }
+    const n = Object.keys(state.auto).length;
+    receivedNote.textContent = n ? `Auto-filled ${n} item(s) — marked "auto". Hover a mark for the evidence.` : 'Nothing recognised; fill the form manually.';
+    if (skipped.length) receivedNote.textContent += ` Skipped: ${skipped.map((g) => `${g.field}=${g.value}`).join(', ')}`;
+    renderForm(); schedule();
+  } catch (err) { receivedNote.textContent = `Analyze failed: ${err}`; }
+};
+composeEl.append(el('details', { className: 'received-box', open: true },
+  el('summary', { textContent: 'Received message (optional)' }), receivedText, fillBtn, receivedNote), formEl);
+
+const autoBadge = (key) => {
+  const g = state.auto[key];
+  return g ? [el('span', { className: 'auto', textContent: 'auto', title: `「${g.evidence}」 · ${g.rule_id}` })] : [];
+};
 const outputEl = el('div', { className: 'output' });
 let seq = 0, timer = 0, last = null;
 
@@ -42,10 +76,10 @@ function segmented(name, options, key) {
   for (const [value, label] of options) {
     const b = el('button', { type: 'button', textContent: label, className: state[key] === value ? 'on' : '' });
     b.setAttribute('aria-pressed', state[key] === value);
-    b.onclick = () => { state[key] = value; renderForm(); schedule(); };
+    b.onclick = () => { state[key] = value; delete state.auto[key]; renderForm(); schedule(); };
     group.append(b);
   }
-  return el('div', { className: 'row' }, el('span', { className: 'lbl', textContent: name }), group);
+  return el('div', { className: 'row' }, el('span', { className: 'lbl' }, name, ...autoBadge(key)), group);
 }
 
 function fieldInput(f) {
@@ -62,13 +96,15 @@ function fieldInput(f) {
     if (f.kind === 'number') input.min = 0;
   }
   input.oninput = input.onchange = () => {
+    if (state.auto[f.key]) { delete state.auto[f.key]; wrapEl.classList.remove('is-auto'); wrapEl.querySelector('.auto')?.remove(); }
     if (f.kind === 'toggle') state.toggles[f.key] = input.checked;
     else state.fields[f.key] = input.value;
     if (f.kind === 'select' || f.kind === 'toggle') renderForm(); // show_if may depend on it
     schedule();
   };
-  const label = el('label', { htmlFor: id, textContent: f.label + (f.required ? ' *' : '') });
-  return el('div', { className: `field kind-${f.kind}`, dataset: { key: f.key } }, label, input, el('div', { className: 'ferr' }));
+  const label = el('label', { htmlFor: id, textContent: f.label + (f.required ? ' *' : '') }, ...autoBadge(f.key));
+  const wrapEl = el('div', { className: `field kind-${f.kind}${state.auto[f.key] ? ' is-auto' : ''}`, dataset: { key: f.key } }, label, input, el('div', { className: 'ferr' }));
+  return wrapEl;
 }
 
 function renderForm() {
@@ -76,9 +112,9 @@ function renderForm() {
   const picker = el('select', { id: 'scenario' }, ...state.scenarios.map((s) =>
     el('option', { value: s.id, textContent: `${s.label_en} · ${s.label_ja}` })));
   picker.value = state.scenario ?? '';
-  picker.onchange = () => { state.scenario = picker.value; renderForm(); schedule(); };
-  composeEl.replaceChildren(
-    el('div', { className: 'row' }, el('label', { className: 'lbl', htmlFor: 'scenario', textContent: 'Scenario' }), picker),
+  picker.onchange = () => { state.scenario = picker.value; delete state.auto.scenario; renderForm(); schedule(); };
+  formEl.replaceChildren(
+    el('div', { className: 'row' }, el('label', { className: 'lbl', htmlFor: 'scenario' }, 'Scenario', ...autoBadge('scenario')), picker),
     segmented('To', RECIPIENTS, 'recipient'),
     segmented('Via', CHANNELS, 'channel'),
     el('div', { className: 'fields' }, ...(sc ? sc.fields.filter(visible).map(fieldInput) : [])),

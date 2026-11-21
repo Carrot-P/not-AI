@@ -13,12 +13,16 @@ if (!window.__TAURI__) {
       { key: 'reachable', label: 'Reachable if urgent', kind: 'toggle', options: [], required: false, show_if: { in_group: 'true' } }]),
     scenario('absence', 'Will be absent', '欠席の連絡'),
   ];
-  const honor = { professor: '先生', boss: '様', coworker: 'さん' };
+  const honor = { professor: '先生', boss: '様', coworker: 'さん', client: '様' };
   window.__TAURI__ = { core: { invoke: async (cmd, args) => {
     if (cmd === 'list_scenarios') return scenarios;
     if (cmd === 'check') return args.text.includes('すみません')
       ? [{ rule_id: 'check.casual_apology', severity: 'warn', start: args.text.indexOf('すみません'), end: args.text.indexOf('すみません') + 5, message: '(stub) casual apology', suggestion: '申し訳ございません' }] : [];
-    if (cmd === 'analyze') return { guesses: [] };
+    if (cmd === 'analyze') return { guesses: [ // canned: pretend the message is from a coworker on chat
+      { field: 'recipient', value: 'coworker', evidence: 'おつかれ', rule_id: 'stub.recipient' },
+      { field: 'channel', value: 'chat', evidence: '！', rule_id: 'stub.channel' },
+      { field: 'scenario', value: 'lateness', evidence: '今どこ', rule_id: 'stub.scenario' },
+      { field: 'recipient_name', value: '佐藤', evidence: '佐藤', rule_id: 'stub.name' }] };
     const { input } = args, sc = scenarios.find((s) => s.id === input.scenario), email = input.channel === 'email';
     for (const f of sc.fields) if (f.required && Object.entries(f.show_if).every(([k, v]) => input[k] === v) && !input.fields[f.key]) throw `Missing required field: ${f.key}`;
     const formal = input.recipient !== 'coworker';
