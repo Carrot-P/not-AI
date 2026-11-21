@@ -1,48 +1,245 @@
 {
   "recipients": {
-    "professor": { "label_en": "Professor", "rank": "above", "in_group": false },
-    "boss": { "label_en": "Boss / manager", "rank": "above", "in_group": true },
-    "coworker": { "label_en": "Coworker", "rank": "equal", "in_group": true }
+    "professor": {
+      "label_en": "Professor",
+      "rank": "above",
+      "in_group": false
+    },
+    "boss": {
+      "label_en": "Boss / manager",
+      "rank": "above",
+      "in_group": true
+    },
+    "coworker": {
+      "label_en": "Coworker",
+      "rank": "equal",
+      "in_group": true
+    },
+    "client": {
+      "label_en": "Client",
+      "rank": "above",
+      "in_group": false
+    }
   },
   "politeness": [
-    { "when": { "rank": "above", "channel": "email" }, "value": "formal" },
-    { "when": { "rank": "above", "channel": "chat" }, "value": "polite" },
-    { "when": { "channel": "email" }, "value": "polite" },
-    { "when": {}, "value": "casual" }
+    {
+      "when": {
+        "rank": "above",
+        "channel": "email"
+      },
+      "value": "formal"
+    },
+    {
+      "when": {
+        "rank": "above",
+        "channel": "chat"
+      },
+      "value": "polite"
+    },
+    {
+      "when": {
+        "channel": "email"
+      },
+      "value": "polite"
+    },
+    {
+      "when": {},
+      "value": "casual"
+    }
   ],
   "slots": {
     "address": [
-      { "id": "address.chat", "when": { "channel": "chat" }, "skip": true },
-      { "id": "address.professor", "when": { "recipient": "professor" }, "ja": "{recipient_name}先生\n" },
-      { "id": "address.internal", "when": {}, "ja": "{recipient_name}さん\n" }
+      {
+        "id": "address.chat",
+        "when": {
+          "channel": "chat"
+        },
+        "skip": true
+      },
+      {
+        "id": "address.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "{client_company}\n{recipient_name}様\n"
+      },
+      {
+        "id": "address.professor",
+        "when": {
+          "recipient": "professor"
+        },
+        "ja": "{recipient_name}先生\n"
+      },
+      {
+        "id": "address.internal",
+        "when": {},
+        "ja": "{recipient_name}さん\n"
+      }
     ],
     "greeting": [
-      { "id": "greeting.outside", "when": { "in_group": "false" }, "ja": "お世話になっております。" },
-      { "id": "greeting.inside", "when": {}, "ja": "お疲れ様です。" }
+      {
+        "id": "greeting.client.chat",
+        "when": {
+          "recipient": "client",
+          "channel": "chat"
+        },
+        "ja": "お世話になっております。"
+      },
+      {
+        "id": "greeting.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "いつもお世話になっております。"
+      },
+      {
+        "id": "greeting.outside",
+        "when": {
+          "in_group": "false"
+        },
+        "ja": "お世話になっております。"
+      },
+      {
+        "id": "greeting.inside",
+        "when": {},
+        "ja": "お疲れ様です。"
+      }
     ],
     "self_intro": [
-      { "id": "self_intro.chat", "when": { "channel": "chat" }, "skip": true },
-      { "id": "self_intro.professor", "when": { "recipient": "professor" }, "ja": "「{event}」を履修している{sender_name}です。\n" },
-      { "id": "self_intro.email", "when": {}, "ja": "{sender_name}です。\n" }
+      {
+        "id": "self_intro.client.email",
+        "when": {
+          "recipient": "client",
+          "channel": "email"
+        },
+        "ja": "{sender_company}の{sender_name}です。\n"
+      },
+      {
+        "id": "self_intro.client.chat",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "{sender_company}の{sender_name}です。"
+      },
+      {
+        "id": "self_intro.chat",
+        "when": {
+          "channel": "chat"
+        },
+        "skip": true
+      },
+      {
+        "id": "self_intro.professor",
+        "when": {
+          "recipient": "professor"
+        },
+        "ja": "「{event}」を履修している{sender_name}です。\n"
+      },
+      {
+        "id": "self_intro.email",
+        "when": {},
+        "ja": "{sender_name}です。\n"
+      }
     ],
     "apology": [
-      { "id": "apology.formal", "when": { "politeness": "formal" }, "ja": "ご迷惑をおかけし、大変申し訳ございません。" },
-      { "id": "apology.polite.above", "when": { "politeness": "polite", "rank": "above" }, "ja": "ご迷惑をおかけして申し訳ありません。" },
-      { "id": "apology.polite", "when": { "politeness": "polite" }, "ja": "ご迷惑をおかけしてすみません。" },
-      { "id": "apology.casual", "when": {}, "ja": "すみません！" }
+      {
+        "id": "apology.formal",
+        "when": {
+          "politeness": "formal"
+        },
+        "ja": "ご迷惑をおかけし、大変申し訳ございません。"
+      },
+      {
+        "id": "apology.client.chat",
+        "when": {
+          "recipient": "client",
+          "channel": "chat"
+        },
+        "ja": "大変申し訳ございません。"
+      },
+      {
+        "id": "apology.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "ご迷惑をおかけし、大変申し訳ございません。"
+      },
+      {
+        "id": "apology.polite.above",
+        "when": {
+          "politeness": "polite",
+          "rank": "above"
+        },
+        "ja": "ご迷惑をおかけして申し訳ありません。"
+      },
+      {
+        "id": "apology.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "ご迷惑をおかけしてすみません。"
+      },
+      {
+        "id": "apology.casual",
+        "when": {},
+        "ja": "すみません！"
+      }
     ],
     "request": [
-      { "id": "request.none", "when": {}, "skip": true }
+      {
+        "id": "request.none",
+        "when": {},
+        "skip": true
+      }
     ],
     "closing": [
-      { "id": "closing.formal", "when": { "politeness": "formal" }, "ja": "何卒よろしくお願いいたします。\n" },
-      { "id": "closing.email", "when": { "channel": "email" }, "ja": "よろしくお願いいたします。\n" },
-      { "id": "closing.chat.polite", "when": { "politeness": "polite" }, "ja": "よろしくお願いいたします。" },
-      { "id": "closing.chat.casual", "when": {}, "skip": true }
+      {
+        "id": "closing.formal",
+        "when": {
+          "politeness": "formal"
+        },
+        "ja": "何卒よろしくお願いいたします。\n"
+      },
+      {
+        "id": "closing.email",
+        "when": {
+          "channel": "email"
+        },
+        "ja": "よろしくお願いいたします。\n"
+      },
+      {
+        "id": "closing.chat.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "よろしくお願いいたします。"
+      },
+      {
+        "id": "closing.chat.casual",
+        "when": {},
+        "skip": true
+      }
     ],
     "signature": [
-      { "id": "signature.chat", "when": { "channel": "chat" }, "skip": true },
-      { "id": "signature.email", "when": {}, "ja": "{sender_name}" }
+      {
+        "id": "signature.chat",
+        "when": {
+          "channel": "chat"
+        },
+        "skip": true
+      },
+      {
+        "id": "signature.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "{sender_company}\n{sender_name}"
+      },
+      {
+        "id": "signature.email",
+        "when": {},
+        "ja": "{sender_name}"
+      }
     ]
   }
 }
