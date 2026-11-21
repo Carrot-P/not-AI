@@ -2,7 +2,7 @@
   "name": "not-ai",
   "private": true,
   "scripts": {
-    "build": "vite build frontend --base=./"
+    "build": "vite build frontend --base=./ --outDir ../dist --emptyOutDir"
   },
   "dependencies": {
     "dockview": "^8.9.1"

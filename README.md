@@ -4,9 +4,11 @@
 
 ```sh
 npm ci
-npm run build
 cargo run
 ```
+
+Cargo runs `npm run build` automatically, including after frontend source changes.
+Run `npm ci` again when `package-lock.json` changes.
 
 Drag the Editor or Explorer tab to dock it beside another panel or merge them
 into one tab group. Drag the divider to resize the panels.

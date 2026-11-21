@@ -1,6 +1,8 @@
-use std::{env, fs, io, path::Path};
+use std::{env, fs, io, path::Path, process::Command};
 
 fn main() {
+    build_frontend();
+
     // Stage the prototype fixtures first. Team-owned JSON takes precedence file by file.
     let out = env::var_os("OUT_DIR").expect("Cargo sets OUT_DIR");
     let staging = Path::new(&out).join("engine-data");
@@ -16,6 +18,27 @@ fn main() {
     }
 
     tauri_build::build();
+}
+
+fn build_frontend() {
+    for input in ["frontend", "package.json", "package-lock.json"] {
+        println!("cargo:rerun-if-changed={input}");
+    }
+
+    let mut npm = if cfg!(windows) {
+        let mut cmd = Command::new("cmd.exe");
+        cmd.args(["/D", "/C", "npm.cmd"]);
+        cmd
+    } else {
+        Command::new("npm")
+    };
+    let status = npm.args(["run", "build"]).status().unwrap_or_else(|err| {
+        panic!("Could not start npm: {err}. Install Node.js and ensure npm is on PATH.");
+    });
+    assert!(
+        status.success(),
+        "npm run build failed ({status}). Run `npm ci` in the repository root and check the npm output above."
+    );
 }
 
 fn copy_json(source: &Path, destination: &Path) -> io::Result<()> {

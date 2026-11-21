@@ -2,4 +2,5 @@
 /gen/schemas/
 /node_modules/
 /frontend/dist/
+/dist/
 /docs

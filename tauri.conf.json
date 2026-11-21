@@ -2,7 +2,7 @@
   "productName": "not-AI",
   "identifier": "org.heckathon.not-ai",
   "build": {
-    "frontendDist": "frontend/dist"
+    "frontendDist": "dist"
   },
   "app": {
     "withGlobalTauri": true,

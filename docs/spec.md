@@ -37,7 +37,7 @@ Tauri 2 desktop app. Rust engine in `src/engine/` (no Tauri dep, `cargo test`), 
 - Data: data/common.json, data/scenarios/<id>.json, data/keigo_verbs.json, data/check_rules.json, data/analyze_rules.json, tests/golden/*.json (must_contain / must_not_contain / expect_subject).
 
 ## Run
-`npm ci && npm run build && cargo run` (app) · `npx vite frontend` → localhost:5173 (UI only) · `cargo test`
+`npm ci && cargo run` (app; Cargo builds the frontend) · `npx vite frontend` → localhost:5173 (UI only) · `cargo test`
 
 ## Team
 - Celia: Rust engine + Tauri shell + release workflow
