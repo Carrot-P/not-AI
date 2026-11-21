@@ -4,6 +4,6 @@
     "frontendDist": "frontend"
   },
   "app": {
-    "windows": [{ "title": "文本编辑器" }]
+    "windows": [{ "title": "Text Editor" }]
   }
 }
