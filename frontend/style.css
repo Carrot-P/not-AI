@@ -6,8 +6,26 @@ body { margin: 0; }
   font: 13px system-ui, sans-serif;
 }
 
+/* Editor: textarea + overlay must share font, padding and wrapping exactly */
+.editor-wrap { position: relative; height: 100%; }
+.editor-wrap textarea, .editor-overlay { scrollbar-gutter: stable; overflow-wrap: break-word; white-space: pre-wrap; }
+.editor-overlay {
+  position: absolute; inset: 0; box-sizing: border-box; padding: 12px; overflow: hidden;
+  font: 16px/1.5 monospace; color: transparent; pointer-events: none;
+}
+.editor-overlay mark { color: transparent; background: rgba(224,160,0,.15); pointer-events: auto; cursor: help;
+  text-decoration: underline wavy #e0a000; text-decoration-skip-ink: none; text-underline-offset: 3px; }
+.editor-overlay mark.sev-error { background: rgba(198,40,40,.12); text-decoration-color: #c62828; }
+.editor-overlay mark.sev-info { background: rgba(31,78,156,.10); text-decoration-color: #1f4e9c; }
+.issue-tip { position: fixed; z-index: 1000; max-width: 360px; background: #fff; border: 1px solid #bbb; border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.15); padding: 8px 10px; font: 13px/1.45 system-ui, sans-serif; }
+.issue-tip .sev { text-transform: uppercase; font-size: 11px; }
+.issue-tip button { display: block; margin-top: 6px; border: 1px solid #2e7d32; color: #2e7d32; background: #f1f8f1;
+  border-radius: 4px; padding: 3px 8px; font: inherit; cursor: pointer; }
+
 textarea {
   display: block;
+  background: transparent;
   box-sizing: border-box;
   width: 100%;
   height: 100%;

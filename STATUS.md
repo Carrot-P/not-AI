@@ -5,7 +5,7 @@ Contract version: v1 (team plan doc, section 2: https://claude.ai/artifact/FwSjU
 |---|---|---|---|---|---|
 | Celia | Engine + Tauri | Implemented; integration pending | `src/`, `Cargo.toml`, `build.rs`, `tauri.conf.json`, `tests/golden.rs`, `.github/workflows/release.yml` | Waiting for `data/`, `tests/golden/`, and the questionnaire UI | 2026-11-21 14:24 JST |
 | Xin | JP data (+ Day 2 analyzer) | Day 1 data/ done: lateness+absence × professor/boss/coworker × email/chat, 19 verbs, 7 check rules; `cargo test` green. Placeholders used: {verb:…}, {reason_cause}, {day_phrase}, {event}, {minutes}, {sender_name}, {recipient_name}, {reason_other}. New fields: `event` (professor only), `day`, toggle `reachable` (show_if in_group=true) | `data/` (+ `src/engine/analyze.rs` Day 2) | - | 2026-11-21 15:31 JST |
-| Zine | Frontend | Day 1 pushed: Compose + Output panels (scenario picker, recipient/channel, FieldMeta form w/ show_if, live compose, Why? trace, Copy, check list, inline required errors). Tested in browser w/ stub; please smoke-test in app | `frontend/` (compose.js, stub.js, style.css, main.js) | - | 2026-11-21 15:47 JST |
+| Zine | Frontend | Day 1 UI done. Day 2 #1 pushed: Editor highlights check issues inline (wavy underline by severity), hover shows message + click-to-apply suggestion, re-checks on typing and on recipient/channel change. Next: Received-message box → analyze (needs Xin's analyzer). Browser-tested w/ stub; please smoke-test in app | `frontend/` (compose.js, editor.js, stub.js, style.css, main.js) | - | 2026-11-21 18:05 JST |
 | Thomas | Tests + pitch + submission | doing | `tests/golden/*.json`, `README.md`, `docs/` | - | 13:20 |
 
 ## Celia — verification

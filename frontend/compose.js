@@ -1,5 +1,6 @@
 // Compose + Output panels. All scenario fields come from list_scenarios (FieldMeta); nothing hard-coded.
 import common from '../data/common.json';
+import { setEditorText, scheduleCheck } from './editor.js';
 const invoke = (cmd, args) => window.__TAURI__.core.invoke(cmd, args);
 const RECIPIENTS = [['professor', 'Professor'], ['boss', 'Boss'], ['coworker', 'Coworker']];
 const CHANNELS = [['email', 'Email'], ['chat', 'Chat']];
@@ -104,7 +105,7 @@ async function run() {
     if (my !== seq) return;
     last = out;
     const issues = await invoke('check', { text: out.text, ctx: { recipient: input.recipient, channel: input.channel, lang: input.lang } });
-    if (my === seq) renderOutput(out, issues);
+    if (my === seq) { renderOutput(out, issues); scheduleCheck(); } // recipient/channel change re-checks the editor
   } catch (err) {
     if (my !== seq) return;
     const msg = String(err), key = msg.match(/Missing required field: (\S+)/)?.[1];
@@ -143,7 +144,7 @@ function renderOutput(out, issues) {
     setTimeout(() => { copy.textContent = 'Copy'; }, 1200);
   };
   const toEditor = el('button', { type: 'button', textContent: 'To editor' });
-  toEditor.onclick = () => { const t = document.querySelector('textarea[aria-label="Text editor"]'); if (t) t.value = out.text; };
+  toEditor.onclick = () => setEditorText(out.text);
 
   const list = el('ul', { className: 'issues' }, ...issues.map((i) => el('li', { className: `sev-${i.severity}` },
     el('span', { className: 'sev', textContent: i.severity }),
@@ -167,5 +168,6 @@ export async function initCompose() {
   schedule();
 }
 
+export const checkCtx = () => ({ recipient: state.recipient, channel: state.channel, lang: state.lang });
 export const composePanel = () => ({ element: composeEl, init() {} });
 export const outputPanel = () => ({ element: outputEl, init() {} });

@@ -2,6 +2,7 @@ import './stub.js';
 import { createDockview, themeLight } from 'dockview';
 import 'dockview/dist/styles/dockview.css';
 import './style.css';
+import { editorPanel } from './editor.js';
 import { composePanel, outputPanel, initCompose } from './compose.js';
 
 const workspace = document.getElementById('workspace');
@@ -20,13 +21,7 @@ const dock = createDockview(workspace, {
   createComponent({ name }) {
     if (name === 'compose') return composePanel();
     if (name === 'output') return outputPanel();
-    if (name === 'editor') {
-      const element = document.createElement('textarea');
-      element.setAttribute('aria-label', 'Text editor');
-      element.autofocus = true;
-      element.spellcheck = false;
-      return { element, init() {}, focus: () => element.focus() };
-    }
+    if (name === 'editor') return editorPanel();
 
     return { element: document.createElement('div'), init() {} };
   },
