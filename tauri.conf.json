@@ -1,0 +1,9 @@
+{
+  "identifier": "org.heckathon.not-ai",
+  "build": {
+    "frontendDist": "frontend"
+  },
+  "app": {
+    "windows": [{ "title": "文本编辑器" }]
+  }
+}
