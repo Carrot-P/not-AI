@@ -1,0 +1,39 @@
+{
+  "id": "lateness",
+  "label_en": "Running late",
+  "label_ja": "遅刻の連絡",
+  "langs": ["ja"],
+  "fields": [
+    { "key": "sender_name", "label": "Your family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "recipient_name", "label": "Their family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "event", "label": "Course name (Japanese)", "kind": "text", "required": true, "show_if": { "recipient": "professor" } },
+    { "key": "reason", "label": "Reason", "kind": "select", "options": ["train_delay", "illness", "oversleep", "other"], "required": true },
+    { "key": "reason_other", "label": "Other reason (Japanese)", "kind": "text", "required": true, "show_if": { "reason": "other" } },
+    { "key": "minutes", "label": "Minutes late", "kind": "number", "required": true },
+    { "key": "ask_handouts", "label": "Ask for handouts", "kind": "toggle", "show_if": { "recipient": "professor" } }
+  ],
+  "slot_order": ["subject", "address", "greeting", "self_intro", "core", "apology", "request", "closing", "signature"],
+  "phrases": {
+    "reason_cause": { "by": "reason", "map": {
+      "train_delay": { "formal": "電車遅延のため", "casual": "電車が遅れていて" },
+      "illness": { "formal": "体調不良のため", "casual": "体調が悪くて" },
+      "oversleep": { "formal": "寝坊してしまい", "casual": "寝坊してしまって" },
+      "other": { "formal": "{reason_other}のため", "casual": "{reason_other}で" }
+    } }
+  },
+  "slots": {
+    "subject": [
+      { "id": "subject.late.professor", "when": { "recipient": "professor" }, "ja": "【遅刻のご連絡】{event}（{sender_name}）" },
+      { "id": "subject.late", "when": {}, "ja": "【遅刻のご連絡】{sender_name}" }
+    ],
+    "core": [
+      { "id": "core.late.professor", "when": { "recipient": "professor" }, "ja": "本日の授業ですが、{reason_cause}、{minutes}分ほど遅れて{verb:到着する}。" },
+      { "id": "core.late.work", "when": { "politeness": ["formal", "polite"] }, "ja": "本日、{reason_cause}、{minutes}分ほど遅れて{verb:出勤する}。" },
+      { "id": "core.late.casual", "when": {}, "ja": "{reason_cause}、{minutes}分くらい遅刻しそうです。" }
+    ],
+    "request": [
+      { "id": "request.handouts.formal", "when": { "recipient": "professor", "ask_handouts": "true", "politeness": "formal" }, "ja": "恐れ入りますが、授業開始時に配布資料がございましたら、後ほどいただけますと幸いです。" },
+      { "id": "request.handouts.polite", "when": { "recipient": "professor", "ask_handouts": "true" }, "ja": "もし配布資料があれば、後ほどいただけますでしょうか。" }
+    ]
+  }
+}

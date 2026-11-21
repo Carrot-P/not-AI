@@ -1,0 +1,55 @@
+{
+  "id": "absence",
+  "label_en": "Will be absent",
+  "label_ja": "欠席の連絡",
+  "langs": ["ja"],
+  "fields": [
+    { "key": "sender_name", "label": "Your family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "recipient_name", "label": "Their family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "event", "label": "Course name (Japanese)", "kind": "text", "required": true, "show_if": { "recipient": "professor" } },
+    { "key": "day", "label": "When", "kind": "select", "options": ["today", "tomorrow"], "required": true },
+    { "key": "reason", "label": "Reason", "kind": "select", "options": ["illness", "family", "job_hunting", "personal", "other"], "required": true },
+    { "key": "reason_other", "label": "Other reason (Japanese)", "kind": "text", "required": true, "show_if": { "reason": "other" } },
+    { "key": "ask_handouts", "label": "Ask for handouts / homework", "kind": "toggle", "show_if": { "recipient": "professor" } },
+    { "key": "reachable", "label": "Reachable if urgent", "kind": "toggle", "show_if": { "in_group": "true" } }
+  ],
+  "slot_order": ["subject", "address", "greeting", "self_intro", "core", "apology", "request", "closing", "signature"],
+  "phrases": {
+    "day_phrase": { "by": "day", "map": {
+      "today": { "formal": "本日", "casual": "今日" },
+      "tomorrow": "明日"
+    } },
+    "reason_cause": { "by": "reason", "map": {
+      "illness": { "formal": "体調不良のため", "casual": "体調を崩してしまって" },
+      "family": { "formal": "家庭の事情により", "casual": "家の事情で" },
+      "job_hunting": { "formal": "就職活動のため", "casual": "就活で" },
+      "personal": { "formal": "私用のため", "casual": "用事があって" },
+      "other": { "formal": "{reason_other}のため", "casual": "{reason_other}で" }
+    } }
+  },
+  "slots": {
+    "subject": [
+      { "id": "subject.absence.professor", "when": { "recipient": "professor" }, "ja": "【欠席のご連絡】{event}（{sender_name}）" },
+      { "id": "subject.absence", "when": {}, "ja": "【お休みのご連絡】{sender_name}" }
+    ],
+    "core": [
+      { "id": "core.absence.professor", "when": { "recipient": "professor" }, "ja": "{day_phrase}の授業ですが、{reason_cause}、{verb:欠席する}。" },
+      { "id": "core.absence.boss", "when": { "recipient": "boss" }, "ja": "{day_phrase}は{reason_cause}、{verb:休む#itadaku}。" },
+      { "id": "core.absence.coworker.polite", "when": { "politeness": ["formal", "polite"] }, "ja": "{day_phrase}は{reason_cause}、お休みをいただきます。" },
+      { "id": "core.absence.casual", "when": {}, "ja": "{day_phrase}は{reason_cause}、お休みします。" }
+    ],
+    "apology": [
+      { "id": "apology.absence.today.formal", "when": { "day": "today", "politeness": "formal" }, "ja": "急なご連絡となり、大変申し訳ございません。" },
+      { "id": "apology.absence.today.above", "when": { "day": "today", "rank": "above" }, "ja": "急なご連絡で申し訳ありません。" },
+      { "id": "apology.absence.today.polite", "when": { "day": "today", "politeness": "polite" }, "ja": "急なご連絡ですみません。" },
+      { "id": "apology.absence.today.casual", "when": { "day": "today" }, "ja": "急ですみません！" }
+    ],
+    "request": [
+      { "id": "request.handouts.formal", "when": { "recipient": "professor", "ask_handouts": "true", "politeness": "formal" }, "ja": "恐れ入りますが、授業の配布資料や課題がございましたら、お知らせいただけますと幸いです。" },
+      { "id": "request.handouts.polite", "when": { "recipient": "professor", "ask_handouts": "true" }, "ja": "もし配布資料や課題があれば、教えていただけますでしょうか。" },
+      { "id": "request.reachable.formal", "when": { "reachable": "true", "politeness": "formal" }, "ja": "なお、急ぎの件がございましたら、メールにてご連絡いただければ対応いたします。" },
+      { "id": "request.reachable.polite", "when": { "reachable": "true", "politeness": "polite" }, "ja": "急ぎの件があれば、ご連絡いただければ対応します。" },
+      { "id": "request.reachable.casual", "when": { "reachable": "true" }, "ja": "急ぎの件があれば連絡ください。" }
+    ]
+  }
+}

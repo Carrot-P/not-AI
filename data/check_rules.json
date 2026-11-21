@@ -1,0 +1,16 @@
+[
+  { "id": "double_keigo.ukagau", "kind": "regex", "pattern": "お伺いさせていただ", "when": {}, "severity": "warn",
+    "message": "Double keigo: お伺い already humbles 聞く/行く; adding させていただく stacks a second humble form.", "suggestion": "伺います" },
+  { "id": "double_keigo.ossharu", "kind": "regex", "pattern": "おっしゃられ", "when": {}, "severity": "warn",
+    "message": "Double keigo: おっしゃる is already honorific; られ adds a second honorific.", "suggestion": "おっしゃいました" },
+  { "id": "double_keigo.goran", "kind": "regex", "pattern": "ご覧になられ", "when": {}, "severity": "warn",
+    "message": "Double keigo: ご覧になる is already honorific; られ adds a second honorific.", "suggestion": "ご覧になりました" },
+  { "id": "double_keigo.okoshi", "kind": "regex", "pattern": "お越しになられ", "when": {}, "severity": "warn",
+    "message": "Double keigo: お越しになる is already honorific; られ adds a second honorific.", "suggestion": "お越しになります" },
+  { "id": "ryoukai.superior", "kind": "regex", "pattern": "了解(しました|です|いたしました)", "when": { "rank": "above" }, "severity": "error",
+    "message": "了解 sounds like you are approving their request; many people find it rude toward a professor or boss.", "suggestion": "承知いたしました" },
+  { "id": "gokurou.superior", "kind": "regex", "pattern": "ご苦労様", "when": { "rank": "above" }, "severity": "error",
+    "message": "ご苦労様 is said by a superior to someone below them, not to a professor or boss.", "suggestion": "お疲れ様です" },
+  { "id": "chat.too_long", "kind": "max_chars", "max": 120, "when": { "channel": "chat" }, "severity": "info",
+    "message": "Chat messages over 120 characters feel heavy; consider email or split the message." }
+]
