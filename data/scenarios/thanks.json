@@ -1,0 +1,231 @@
+{
+  "id": "thanks",
+  "label_en": "Say thank you",
+  "label_ja": "お礼",
+  "langs": [
+    "ja"
+  ],
+  "fields": [
+    {
+      "key": "sender_name",
+      "label": "Your family name",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "channel": "email"
+      }
+    },
+    {
+      "key": "recipient_name",
+      "label": "Their family name",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "channel": "email"
+      }
+    },
+    {
+      "key": "client_company",
+      "label": "Client's company (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "recipient": "client"
+      }
+    },
+    {
+      "key": "sender_company",
+      "label": "Your company (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "recipient": "client"
+      }
+    },
+    {
+      "key": "event",
+      "label": "Course name (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "recipient": "professor"
+      }
+    },
+    {
+      "key": "occasion",
+      "label": "Thanks for",
+      "kind": "select",
+      "options": [
+        "advice",
+        "help",
+        "meeting",
+        "other"
+      ],
+      "required": true
+    },
+    {
+      "key": "topic",
+      "label": "About what (Japanese, e.g. 卒業研究, 資料作成)",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "key": "thanks_other",
+      "label": "What they did (Japanese, e.g. シフトを代わっていただき)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "occasion": "other"
+      }
+    }
+  ],
+  "slot_order": [
+    "subject",
+    "address",
+    "greeting",
+    "self_intro",
+    "core",
+    "detail",
+    "closing",
+    "signature"
+  ],
+  "phrases": {
+    "thanks_for": {
+      "by": "occasion",
+      "map": {
+        "advice": {
+          "formal": "{topic}について丁寧にご助言いただき",
+          "casual": "{topic}についてアドバイスしてくれて"
+        },
+        "help": {
+          "formal": "{topic}の件でお力添えいただき",
+          "casual": "{topic}を手伝ってくれて"
+        },
+        "meeting": {
+          "formal": "{topic}の件でお忙しい中お時間をいただき",
+          "casual": "{topic}の件で時間を取ってくれて"
+        },
+        "other": "{thanks_other}"
+      }
+    },
+    "result": {
+      "by": "occasion",
+      "map": {
+        "advice": {
+          "formal": "大変勉強になりました。",
+          "casual": "すごく参考になりました。"
+        },
+        "help": {
+          "formal": "おかげさまで、無事に進めることができました。",
+          "casual": "本当に助かりました。"
+        },
+        "meeting": {
+          "formal": "大変有意義なお時間となりました。",
+          "casual": "話せてよかったです。"
+        }
+      }
+    }
+  },
+  "slots": {
+    "subject": [
+      {
+        "id": "subject.thanks.professor",
+        "when": {
+          "recipient": "professor"
+        },
+        "ja": "【御礼】{topic}の件（{sender_name}）"
+      },
+      {
+        "id": "subject.thanks.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "【御礼】{topic}の件（{sender_company} {sender_name}）"
+      },
+      {
+        "id": "subject.thanks",
+        "when": {},
+        "ja": "【お礼】{topic}の件（{sender_name}）"
+      }
+    ],
+    "core": [
+      {
+        "id": "core.thanks.formal",
+        "when": {
+          "politeness": "formal"
+        },
+        "ja": "先日は{thanks_for}、誠にありがとうございました。"
+      },
+      {
+        "id": "core.thanks.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "先日は{thanks_for}、誠にありがとうございました。"
+      },
+      {
+        "id": "core.thanks.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "先日は{thanks_for}、ありがとうございました。"
+      },
+      {
+        "id": "core.thanks.casual",
+        "when": {},
+        "ja": "この前は{thanks_for}、ありがとうございました！"
+      }
+    ],
+    "detail": [
+      {
+        "id": "detail.thanks.other",
+        "when": {
+          "occasion": "other"
+        },
+        "skip": true
+      },
+      {
+        "id": "detail.thanks",
+        "when": {},
+        "ja": "{result}"
+      }
+    ],
+    "closing": [
+      {
+        "id": "closing.thanks.professor.email",
+        "when": {
+          "recipient": "professor",
+          "channel": "email"
+        },
+        "ja": "今後ともご指導のほど、よろしくお願いいたします。\n"
+      },
+      {
+        "id": "closing.thanks.client.email",
+        "when": {
+          "recipient": "client",
+          "channel": "email"
+        },
+        "ja": "今後ともどうぞよろしくお願いいたします。\n"
+      },
+      {
+        "id": "closing.thanks.email",
+        "when": {
+          "channel": "email"
+        },
+        "ja": "引き続きよろしくお願いいたします。\n"
+      },
+      {
+        "id": "closing.thanks.chat.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "引き続きよろしくお願いいたします。"
+      },
+      {
+        "id": "closing.thanks.casual",
+        "when": {},
+        "ja": "また何かあればよろしくお願いします！"
+      }
+    ]
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "id": "reschedule",
+  "label_en": "Ask to reschedule",
+  "label_ja": "日程変更のお願い",
+  "langs": [
+    "ja"
+  ],
+  "fields": [
+    {
+      "key": "sender_name",
+      "label": "Your family name",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "channel": "email"
+      }
+    },
+    {
+      "key": "recipient_name",
+      "label": "Their family name",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "channel": "email"
+      }
+    },
+    {
+      "key": "client_company",
+      "label": "Client's company (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "recipient": "client"
+      }
+    },
+    {
+      "key": "sender_company",
+      "label": "Your company (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "recipient": "client"
+      }
+    },
+    {
+      "key": "event",
+      "label": "Course name (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "recipient": "professor"
+      }
+    },
+    {
+      "key": "meeting",
+      "label": "Meeting (Japanese, e.g. 面談, 定例会議, お打ち合わせ)",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "key": "orig_date",
+      "label": "Original date (Japanese, e.g. 11月25日（火）14時)",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "key": "new_options",
+      "label": "Alternative dates (Japanese, e.g. 26日（水）午後か27日（木）午前)",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "key": "reason",
+      "label": "Reason",
+      "kind": "select",
+      "options": [
+        "urgent",
+        "work",
+        "illness",
+        "other"
+      ],
+      "required": true
+    },
+    {
+      "key": "reason_other",
+      "label": "Other reason (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "reason": "other"
+      }
+    }
+  ],
+  "slot_order": [
+    "subject",
+    "address",
+    "greeting",
+    "self_intro",
+    "core",
+    "apology",
+    "request",
+    "closing",
+    "signature"
+  ],
+  "phrases": {
+    "reason_cause": {
+      "by": "reason",
+      "map": {
+        "urgent": {
+          "formal": "急用が入ってしまい",
+          "casual": "急用が入ってしまって"
+        },
+        "work": {
+          "formal": "別件の対応が入ってしまい",
+          "casual": "別の仕事が入ってしまって"
+        },
+        "illness": {
+          "formal": "体調を崩してしまい",
+          "casual": "体調を崩してしまって"
+        },
+        "other": {
+          "formal": "{reason_other}のため",
+          "casual": "{reason_other}で"
+        }
+      }
+    }
+  },
+  "slots": {
+    "subject": [
+      {
+        "id": "subject.reschedule.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "【日程変更のお願い】{meeting}（{sender_company} {sender_name}）"
+      },
+      {
+        "id": "subject.reschedule",
+        "when": {},
+        "ja": "【日程変更のお願い】{meeting}（{sender_name}）"
+      }
+    ],
+    "core": [
+      {
+        "id": "core.reschedule.client.chat",
+        "when": {
+          "recipient": "client",
+          "channel": "chat"
+        },
+        "ja": "{orig_date}の{meeting}ですが、{reason_cause}、都合がつかなくなりました。"
+      },
+      {
+        "id": "core.reschedule.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "{orig_date}にお約束しております{meeting}ですが、{reason_cause}、都合がつかなくなってしまいました。"
+      },
+      {
+        "id": "core.reschedule.formal",
+        "when": {
+          "politeness": "formal"
+        },
+        "ja": "{orig_date}の{meeting}ですが、{reason_cause}、都合がつかなくなってしまいました。"
+      },
+      {
+        "id": "core.reschedule.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "{orig_date}の{meeting}ですが、{reason_cause}、都合が悪くなってしまいました。"
+      },
+      {
+        "id": "core.reschedule.casual",
+        "when": {},
+        "ja": "{orig_date}の{meeting}ですが、{reason_cause}、出られなくなりました。"
+      }
+    ],
+    "apology": [
+      {
+        "id": "apology.reschedule.formal",
+        "when": {
+          "politeness": "formal"
+        },
+        "ja": "こちらの都合で大変申し訳ございません。"
+      },
+      {
+        "id": "apology.reschedule.client.chat",
+        "when": {
+          "recipient": "client",
+          "channel": "chat"
+        },
+        "ja": "大変申し訳ございません。"
+      },
+      {
+        "id": "apology.reschedule.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "こちらの都合で大変申し訳ございません。"
+      },
+      {
+        "id": "apology.reschedule.above",
+        "when": {
+          "rank": "above"
+        },
+        "ja": "こちらの都合で申し訳ありません。"
+      },
+      {
+        "id": "apology.reschedule.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "こちらの都合ですみません。"
+      }
+    ],
+    "request": [
+      {
+        "id": "request.reschedule.formal",
+        "when": {
+          "politeness": "formal"
+        },
+        "ja": "誠に恐縮ですが、{new_options}でご都合はいかがでしょうか。"
+      },
+      {
+        "id": "request.reschedule.above",
+        "when": {
+          "rank": "above"
+        },
+        "ja": "{new_options}はいかがでしょうか。"
+      },
+      {
+        "id": "request.reschedule.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "{new_options}あたりで、ご都合はいかがですか。"
+      },
+      {
+        "id": "request.reschedule.casual",
+        "when": {},
+        "ja": "{new_options}あたりで調整できますか？"
+      }
+    ]
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "id": "extension",
+  "label_en": "Ask for a deadline extension",
+  "label_ja": "締切延長のお願い",
+  "langs": [
+    "ja"
+  ],
+  "fields": [
+    {
+      "key": "sender_name",
+      "label": "Your family name",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "channel": "email"
+      }
+    },
+    {
+      "key": "recipient_name",
+      "label": "Their family name",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "channel": "email"
+      }
+    },
+    {
+      "key": "client_company",
+      "label": "Client's company (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "recipient": "client"
+      }
+    },
+    {
+      "key": "sender_company",
+      "label": "Your company (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "recipient": "client"
+      }
+    },
+    {
+      "key": "event",
+      "label": "Course name (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "recipient": "professor"
+      }
+    },
+    {
+      "key": "task",
+      "label": "What is due (Japanese, e.g. レポート, 見積書)",
+      "kind": "text",
+      "required": true
+    },
+    {
+      "key": "reason",
+      "label": "Reason",
+      "kind": "select",
+      "options": [
+        "illness",
+        "workload",
+        "family",
+        "other"
+      ],
+      "required": true
+    },
+    {
+      "key": "reason_other",
+      "label": "Other reason (Japanese)",
+      "kind": "text",
+      "required": true,
+      "show_if": {
+        "reason": "other"
+      }
+    },
+    {
+      "key": "new_date",
+      "label": "New deadline (Japanese, e.g. 11月28日（金）)",
+      "kind": "text",
+      "required": true
+    }
+  ],
+  "slot_order": [
+    "subject",
+    "address",
+    "greeting",
+    "self_intro",
+    "core",
+    "request",
+    "apology",
+    "closing",
+    "signature"
+  ],
+  "phrases": {
+    "reason_cause": {
+      "by": "reason",
+      "map": {
+        "illness": {
+          "formal": "体調を崩してしまい",
+          "casual": "体調を崩してしまって"
+        },
+        "workload": {
+          "formal": "他の予定が重なってしまい",
+          "casual": "ほかの作業が重なってしまって"
+        },
+        "family": {
+          "formal": "家庭の事情により",
+          "casual": "家の事情で"
+        },
+        "other": {
+          "formal": "{reason_other}のため",
+          "casual": "{reason_other}で"
+        }
+      }
+    }
+  },
+  "slots": {
+    "subject": [
+      {
+        "id": "subject.extension.professor",
+        "when": {
+          "recipient": "professor"
+        },
+        "ja": "【提出期限延長のお願い】{event}（{sender_name}）"
+      },
+      {
+        "id": "subject.extension.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "【期限延長のご相談】{task}（{sender_company} {sender_name}）"
+      },
+      {
+        "id": "subject.extension",
+        "when": {},
+        "ja": "【期限延長のご相談】{task}（{sender_name}）"
+      }
+    ],
+    "core": [
+      {
+        "id": "core.extension.formal",
+        "when": {
+          "politeness": "formal"
+        },
+        "ja": "{task}の期限について、ご相談がありご連絡いたしました。{reason_cause}、期限までの提出が難しい状況です。"
+      },
+      {
+        "id": "core.extension.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "{task}の期限についてご相談です。{reason_cause}、間に合いそうにありません。"
+      },
+      {
+        "id": "core.extension.casual",
+        "when": {},
+        "ja": "{task}の期限のことで相談です。{reason_cause}、間に合わなそうです。"
+      }
+    ],
+    "request": [
+      {
+        "id": "request.extension.formal",
+        "when": {
+          "politeness": "formal"
+        },
+        "ja": "誠に恐縮ですが、期限を{new_date}まで延長していただくことは可能でしょうか。"
+      },
+      {
+        "id": "request.extension.above",
+        "when": {
+          "rank": "above"
+        },
+        "ja": "{new_date}までの延長は可能でしょうか。"
+      },
+      {
+        "id": "request.extension.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "{new_date}まで延ばしていただくことはできますか。"
+      },
+      {
+        "id": "request.extension.casual",
+        "when": {},
+        "ja": "{new_date}まで延ばしてもらえると助かります。"
+      }
+    ],
+    "apology": [
+      {
+        "id": "apology.extension.formal",
+        "when": {
+          "politeness": "formal"
+        },
+        "ja": "勝手なお願いで大変申し訳ございません。"
+      },
+      {
+        "id": "apology.extension.client.chat",
+        "when": {
+          "recipient": "client",
+          "channel": "chat"
+        },
+        "ja": "勝手なお願いで申し訳ございません。"
+      },
+      {
+        "id": "apology.extension.client",
+        "when": {
+          "recipient": "client"
+        },
+        "ja": "勝手なお願いで大変申し訳ございません。"
+      },
+      {
+        "id": "apology.extension.above",
+        "when": {
+          "rank": "above"
+        },
+        "ja": "勝手なお願いで申し訳ありません。"
+      },
+      {
+        "id": "apology.extension.polite",
+        "when": {
+          "politeness": "polite"
+        },
+        "ja": "勝手なお願いですみません。"
+      }
+    ]
+  }
+}
