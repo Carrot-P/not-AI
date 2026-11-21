@@ -1,7 +1,7 @@
 {
   "identifier": "org.heckathon.not-ai",
   "build": {
-    "frontendDist": "frontend"
+    "frontendDist": "frontend/dist"
   },
   "app": {
     "windows": [{ "title": "Text Editor" }]
