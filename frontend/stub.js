@@ -9,7 +9,8 @@ if (!window.__TAURI__) {
   const scenarios = [
     scenario('lateness', 'Will be late', '遅刻の連絡', [
       { key: 'minutes', label: 'Minutes late', kind: 'number', options: [], required: true, show_if: {} },
-      { key: 'ask_handouts', label: 'Ask for handouts', kind: 'toggle', options: [], required: false, show_if: { recipient: 'professor' } }]),
+      { key: 'ask_handouts', label: 'Ask for handouts', kind: 'toggle', options: [], required: false, show_if: { recipient: 'professor' } },
+      { key: 'reachable', label: 'Reachable if urgent', kind: 'toggle', options: [], required: false, show_if: { in_group: 'true' } }]),
     scenario('absence', 'Will be absent', '欠席の連絡'),
   ];
   const honor = { professor: '先生', boss: '様', coworker: 'さん' };

@@ -1,4 +1,5 @@
 // Compose + Output panels. All scenario fields come from list_scenarios (FieldMeta); nothing hard-coded.
+import common from '../data/common.json';
 const invoke = (cmd, args) => window.__TAURI__.core.invoke(cmd, args);
 const RECIPIENTS = [['professor', 'Professor'], ['boss', 'Boss'], ['coworker', 'Coworker']];
 const CHANNELS = [['email', 'Email'], ['chat', 'Chat']];
@@ -16,8 +17,19 @@ const outputEl = el('div', { className: 'output' });
 let seq = 0, timer = 0, last = null;
 
 const current = () => state.scenarios.find((s) => s.id === state.scenario);
+// Same derivation as engine derive_context(): rank/in_group from the recipient, politeness from the first matching rule.
+const matches = (when, ctx) => Object.entries(when).every(([k, v]) => k in ctx && (Array.isArray(v) ? v.includes(ctx[k]) : ctx[k] === v));
+function derived() {
+  const ctx = { recipient: state.recipient, channel: state.channel, lang: state.lang };
+  const p = common.recipients?.[state.recipient];
+  if (p) Object.assign(ctx, { rank: p.rank, in_group: String(p.in_group) });
+  const rule = (common.politeness ?? []).find((r) => matches(r.when, ctx));
+  if (rule) ctx.politeness = rule.value;
+  return ctx;
+}
 const ctxValue = (key) => {
-  if (key === 'recipient' || key === 'channel' || key === 'lang') return state[key];
+  const d = derived();
+  if (key in d) return d[key];
   if (key in state.toggles) return String(state.toggles[key]);
   return state.fields[key];
 };
