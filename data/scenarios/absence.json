@@ -22,7 +22,7 @@
     "reason_cause": { "by": "reason", "map": {
       "illness": { "formal": "体調不良のため", "casual": "体調を崩してしまって" },
       "family": { "formal": "家庭の事情により", "casual": "家の事情で" },
-      "job_hunting": { "formal": "就職活動のため", "casual": "就活で" },
+      "job_hunting": { "formal": "就職活動のため", "casual": "就活があって" },
       "personal": { "formal": "私用のため", "casual": "用事があって" },
       "other": { "formal": "{reason_other}のため", "casual": "{reason_other}で" }
     } }
@@ -47,8 +47,8 @@
     "request": [
       { "id": "request.handouts.formal", "when": { "recipient": "professor", "ask_handouts": "true", "politeness": "formal" }, "ja": "恐れ入りますが、授業の配布資料や課題がございましたら、お知らせいただけますと幸いです。" },
       { "id": "request.handouts.polite", "when": { "recipient": "professor", "ask_handouts": "true" }, "ja": "もし配布資料や課題があれば、教えていただけますでしょうか。" },
-      { "id": "request.reachable.formal", "when": { "reachable": "true", "politeness": "formal" }, "ja": "なお、急ぎの件がございましたら、メールにてご連絡いただければ対応いたします。" },
-      { "id": "request.reachable.polite", "when": { "reachable": "true", "politeness": "polite" }, "ja": "急ぎの件があれば、ご連絡いただければ対応します。" },
+      { "id": "request.reachable.formal", "when": { "reachable": "true", "politeness": "formal" }, "ja": "なお、急ぎの件につきましては、メールにてご連絡いただければ対応いたします。" },
+      { "id": "request.reachable.polite", "when": { "reachable": "true", "politeness": "polite" }, "ja": "急ぎの件は、ご連絡いただければ対応します。" },
       { "id": "request.reachable.casual", "when": { "reachable": "true" }, "ja": "急ぎの件があれば連絡ください。" }
     ]
   }
