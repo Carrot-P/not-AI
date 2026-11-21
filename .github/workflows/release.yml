@@ -1,0 +1,49 @@
+name: Desktop release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: windows-latest
+            bundle: nsis
+          - runner: macos-latest
+            bundle: dmg
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Require team data before packaging
+        shell: bash
+        run: |
+          for file in common.json keigo_verbs.json check_rules.json scenarios/lateness.json scenarios/absence.json; do
+            if [[ ! -f "data/$file" ]]; then
+              echo "Missing official rule data: data/$file" >&2
+              exit 1
+            fi
+          done
+          test -d tests/golden
+      - run: npm ci
+      - run: npm run build
+      - run: cargo test --locked
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tauriScript: npx --yes --package=@tauri-apps/cli@2 tauri
+          tagName: ${{ github.ref_name }}
+          releaseName: not-AI ${{ github.ref_name }}
+          releaseDraft: true
+          args: --bundles ${{ matrix.bundle }}

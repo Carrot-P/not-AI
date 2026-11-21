@@ -1,0 +1,8 @@
+[
+  { "id": "double_keigo.ukagau", "kind": "regex", "pattern": "お伺いさせていただ", "when": {}, "severity": "warn",
+    "message": "Double keigo: お伺い + させていただく", "suggestion": "伺います" },
+  { "id": "ryoukai.superior", "kind": "regex", "pattern": "了解(しました|です)", "when": { "rank": "above" }, "severity": "error",
+    "message": "了解しました sounds rude to a superior", "suggestion": "承知いたしました" },
+  { "id": "chat.too_long", "kind": "max_chars", "max": 120, "when": { "channel": "chat" }, "severity": "info",
+    "message": "Chat messages over 120 characters feel heavy" }
+]

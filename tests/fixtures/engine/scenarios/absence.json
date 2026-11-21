@@ -1,0 +1,28 @@
+{
+  "id": "absence",
+  "label_en": "Will be absent",
+  "label_ja": "欠席の連絡",
+  "langs": ["ja"],
+  "fields": [
+    { "key": "sender_name", "label": "Your family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "recipient_name", "label": "Their family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "reason", "label": "Reason", "kind": "select", "options": ["train_delay", "illness", "oversleep", "other"], "required": true },
+    { "key": "reason_other", "label": "Other reason (Japanese)", "kind": "text", "required": true, "show_if": { "reason": "other" } }
+  ],
+  "slot_order": ["subject", "address", "greeting", "self_intro", "core", "apology", "signature"],
+  "phrases": {
+    "reason_phrase": { "by": "reason", "map": {
+      "train_delay": "電車の遅れ",
+      "illness": "体調不良",
+      "oversleep": "私の不注意",
+      "other": "{reason_other}"
+    } }
+  },
+  "slots": {
+    "subject": [{ "id": "subject.absence", "when": {}, "ja": "欠席のご連絡" }],
+    "core": [
+      { "id": "core.absence.formal", "when": { "politeness": "formal" }, "ja": "本日は{reason_phrase}のため、欠席いたします。" },
+      { "id": "core.absence.polite", "when": {}, "ja": "本日は{reason_phrase}で欠席します。" }
+    ]
+  }
+}

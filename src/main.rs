@@ -3,6 +3,8 @@
     windows_subsystem = "windows"
 )]
 
+mod commands;
+
 use tauri::menu::{Menu, MenuItem, Submenu};
 
 fn main() {
@@ -28,6 +30,12 @@ fn main() {
 
             Ok(menu)
         })
+        .invoke_handler(tauri::generate_handler![
+            commands::list_scenarios,
+            commands::compose,
+            commands::check,
+            commands::analyze
+        ])
         .run(tauri::generate_context!())
-        .expect("failed to run text editor");
+        .expect("failed to run not-AI");
 }

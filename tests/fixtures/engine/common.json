@@ -1,0 +1,38 @@
+{
+  "recipients": {
+    "professor": { "label_en": "Professor", "rank": "above", "in_group": false },
+    "boss": { "label_en": "Boss / manager", "rank": "above", "in_group": true },
+    "coworker": { "label_en": "Coworker", "rank": "equal", "in_group": true }
+  },
+  "politeness": [
+    { "when": { "rank": "above", "channel": "email" }, "value": "formal" },
+    { "when": { "rank": "above", "channel": "chat" }, "value": "polite" },
+    { "when": { "channel": "email" }, "value": "polite" },
+    { "when": {}, "value": "casual" }
+  ],
+  "slots": {
+    "address": [
+      { "id": "address.chat", "when": { "channel": "chat" }, "skip": true },
+      { "id": "address.professor", "when": { "recipient": "professor" }, "ja": "{recipient_name}先生" },
+      { "id": "address.internal", "when": {}, "ja": "{recipient_name}さん" }
+    ],
+    "greeting": [
+      { "id": "greeting.chat_casual", "when": { "politeness": "casual" }, "skip": true },
+      { "id": "greeting.outside", "when": { "in_group": "false" }, "ja": "お世話になっております。" },
+      { "id": "greeting.inside", "when": {}, "ja": "お疲れ様です。" }
+    ],
+    "self_intro": [
+      { "id": "self_intro.chat", "when": { "channel": "chat" }, "skip": true },
+      { "id": "self_intro.email", "when": {}, "ja": "{sender_name}です。" }
+    ],
+    "apology": [
+      { "id": "apology.formal", "when": { "politeness": "formal" }, "ja": "ご迷惑をおかけし、申し訳ございません。" },
+      { "id": "apology.polite", "when": { "politeness": "polite" }, "ja": "申し訳ありません。" },
+      { "id": "apology.casual", "when": {}, "ja": "すみません。" }
+    ],
+    "signature": [
+      { "id": "signature.chat", "when": { "channel": "chat" }, "skip": true },
+      { "id": "signature.email", "when": {}, "ja": "{sender_name}" }
+    ]
+  }
+}

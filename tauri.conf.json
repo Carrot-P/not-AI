@@ -1,9 +1,15 @@
 {
+  "productName": "not-AI",
   "identifier": "org.heckathon.not-ai",
   "build": {
     "frontendDist": "frontend/dist"
   },
   "app": {
-    "windows": [{ "title": "Text Editor" }]
+    "withGlobalTauri": true,
+    "windows": [{ "title": "not-AI" }]
+  },
+  "bundle": {
+    "active": true,
+    "icon": ["icons/icon.png", "icons/icon.ico"]
   }
 }
