@@ -1,0 +1,30 @@
+{
+  "input": {
+    "scenario": "absence_en",
+    "recipient": "boss",
+    "channel": "email",
+    "lang": "en",
+    "fields": {
+      "sender_name": "Alex Kim",
+      "recipient_name": "Sato",
+      "event": "Data Structures",
+      "day": "today",
+      "reason": "illness"
+    },
+    "toggles": {
+      "reachable": true
+    }
+  },
+  "must_contain": [
+    "Hi Sato,",
+    "request the day off today",
+    "reachable by phone",
+    "Best regards,"
+  ],
+  "must_not_contain": [
+    "Dear",
+    "Hey",
+    "Professor"
+  ],
+  "expect_subject": true
+}

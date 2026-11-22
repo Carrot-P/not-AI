@@ -36,6 +36,14 @@ const SCENARIO_FILES: &[&str] = &[
         env!("OUT_DIR"),
         "/engine-data/scenarios/thanks.json"
     )),
+    include_str!(concat!(
+        env!("OUT_DIR"),
+        "/engine-data/scenarios/lateness_en.json"
+    )),
+    include_str!(concat!(
+        env!("OUT_DIR"),
+        "/engine-data/scenarios/absence_en.json"
+    )),
 ];
 
 pub(super) type Context = BTreeMap<String, String>;

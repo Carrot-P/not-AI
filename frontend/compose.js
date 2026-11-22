@@ -31,8 +31,10 @@ fillBtn.onclick = async () => {
       const key = g.field.replace(/^fields\./, '');
       if (key === 'scenario' && !state.scenarios.some((s) => s.id === g.value)) { skipped.push(g); continue; }
       if (key === 'recipient' && !RECIPIENTS.some(([id]) => id === g.value)) { skipped.push(g); continue; }
-      if (['scenario', 'recipient', 'channel'].includes(key)) state[key] = g.value;
-      else state.fields[key] = g.value;
+      if (['scenario', 'recipient', 'channel'].includes(key)) {
+        state[key] = g.value;
+        if (key === 'scenario') state.lang = current()?.langs?.[0] ?? 'ja';
+      } else state.fields[key] = g.value;
       state.auto[key] = g;
     }
     const shown = new Set(['scenario', 'recipient', 'channel', ...(current()?.fields.filter(visible).map((f) => f.key) ?? [])]);
@@ -112,7 +114,7 @@ function renderForm() {
   const picker = el('select', { id: 'scenario' }, ...state.scenarios.map((s) =>
     el('option', { value: s.id, textContent: `${s.label_en} · ${s.label_ja}` })));
   picker.value = state.scenario ?? '';
-  picker.onchange = () => { state.scenario = picker.value; delete state.auto.scenario; renderForm(); schedule(); };
+  picker.onchange = () => { state.scenario = picker.value; state.lang = current()?.langs?.[0] ?? 'ja'; delete state.auto.scenario; renderForm(); schedule(); };
   formEl.replaceChildren(
     el('div', { className: 'row' }, el('label', { className: 'lbl', htmlFor: 'scenario' }, 'Scenario', ...autoBadge('scenario')), picker),
     segmented('To', RECIPIENTS, 'recipient'),
@@ -198,6 +200,7 @@ export async function initCompose() {
   try {
     state.scenarios = await invoke('list_scenarios');
     state.scenario = state.scenarios[0]?.id ?? null;
+    state.lang = current()?.langs?.[0] ?? 'ja';
   } catch (err) {
     outputEl.replaceChildren(el('div', { className: 'error', textContent: `Engine unavailable: ${err}` }));
   }
