@@ -12,7 +12,7 @@ Writing is about 40% of work-related ChatGPT messages (OpenAI, *How People Use C
 - **Decode:** explains received keigo, including requests, deadlines and soft refusals. English glosses for every generated segment.
 - Date and season rules (時候の挨拶).
 
-## No-AI proof
+## No-AI used
 No ML models, AI APIs or trained tokenizers (no MeCab/kuromoji, spaCy, LanguageTool). All behaviour comes from JSON rule files in `data/`. The output is deterministic, the app runs offline (airplane mode), and the repo contains no model files.
 
 ## Libraries
