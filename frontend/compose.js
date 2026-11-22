@@ -73,7 +73,7 @@ const autoBadge = (key) => {
   return g ? [el('span', { className: 'auto', textContent: 'auto', title: `「${g.evidence}」 · ${g.rule_id}` })] : [];
 };
 const outputEl = el('div', { className: 'output' });
-let seq = 0, timer = 0, last = null;
+let seq = 0, timer = 0, last = null, glossOpen = false;
 
 const current = () => state.scenarios.find((s) => s.id === state.scenario);
 // Same derivation as engine derive_context(): rank/in_group from the recipient, politeness from the first matching rule.
@@ -184,12 +184,13 @@ function renderOutput(out, issues) {
     const at = out.text.indexOf(s.text, pos);
     if (at < 0) continue;
     if (at > pos) body.append(out.text.slice(pos, at));
-    const span = el('span', { className: `segment slot-${s.slot}`, textContent: s.text, tabIndex: 0, title: s.rule_id });
+    const span = el('span', { className: `segment slot-${s.slot}`, textContent: s.text, tabIndex: 0, title: s.gloss ?? s.rule_id });
     span.onclick = span.onkeydown = (e) => {
       if (e.type === 'keydown' && e.key !== 'Enter') return;
       body.querySelectorAll('.segment.sel').forEach((n) => n.classList.remove('sel'));
       span.classList.add('sel');
-      why.replaceChildren(el('b', { textContent: 'Why? ' }), el('code', { textContent: s.rule_id }), el('div', { textContent: s.why }));
+      why.replaceChildren(el('b', { textContent: 'Why? ' }), el('code', { textContent: s.rule_id }), el('div', { textContent: s.why }),
+        ...(s.gloss ? [el('div', { className: 'gloss-line', textContent: `Meaning: ${s.gloss}` })] : []));
     };
     body.append(span);
     pos = at + s.text.length;
@@ -206,13 +207,18 @@ function renderOutput(out, issues) {
   const toEditor = el('button', { type: 'button', textContent: 'To editor' });
   toEditor.onclick = () => setEditorText(out.text);
 
+  // Per-segment English gloss (data/glosses.json); open state survives re-renders.
+  const glossed = [...(out.subject_gloss ? [['件名', out.subject_gloss]] : []), ...out.segments.filter((s) => s.gloss).map((s) => [s.text.trim(), s.gloss])];
+  const gloss = el('details', { className: 'gloss', open: glossOpen }, el('summary', { textContent: 'English meaning' }),
+    el('ol', {}, ...glossed.map(([ja, en]) => el('li', {}, el('span', { className: 'ja', lang: 'ja', textContent: ja }), el('div', { textContent: en })))));
+  gloss.ontoggle = () => { glossOpen = gloss.open; };
   const list = el('ul', { className: 'issues' }, ...issues.map((i) => el('li', { className: `sev-${i.severity}` },
     el('span', { className: 'sev', textContent: i.severity }),
     el('q', { lang: 'ja', textContent: out.text.slice(i.start, i.end) }), ` ${i.message}`,
     ...(i.suggestion ? [el('div', { className: 'sugg', textContent: `→ ${i.suggestion}` })] : []))));
   outputEl.replaceChildren(
     ...(out.subject ? [el('div', { className: 'subject', lang: 'ja' }, el('span', { className: 'lbl', textContent: '件名' }), out.subject)] : []),
-    body, el('div', { className: 'actions' }, copy, toEditor), why,
+    body, el('div', { className: 'actions' }, copy, toEditor), why, ...(glossed.length ? [gloss] : []),
     el('h3', { textContent: issues.length ? `Check: ${issues.length} issue(s)` : 'Check: no issues ✓' }), list,
   );
 }

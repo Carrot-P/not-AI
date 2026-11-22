@@ -103,3 +103,8 @@ textarea {
 .k-cushion { background: #90a4ae44; } .k-info { background: #4fc3f744; } .k-honorific { background: #81c78455; }
 .decode-summary li { background: none; } .decode-summary li.k-request b { color: #b8860b; }
 .decode-summary li.k-deadline b { color: #c62828; } .decode-summary li.k-refusal b { color: #8e24aa; }
+
+/* Per-segment English gloss */
+.gloss { margin-top: .6em; } .gloss summary { cursor: pointer; font-weight: 600; }
+.gloss ol { margin: .3em 0; padding-left: 1.4em; } .gloss li { margin: .25em 0; }
+.gloss .ja { opacity: .65; font-size: .85em; } .why .gloss-line { margin-top: .3em; font-style: italic; }

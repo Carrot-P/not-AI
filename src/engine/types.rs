@@ -17,11 +17,16 @@ pub struct Segment {
     pub text: String,
     pub rule_id: String,
     pub why: String,
+    /// English meaning of a Japanese segment (data/glosses.json).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gloss: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ComposeOutput {
     pub subject: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub subject_gloss: Option<String>,
     pub segments: Vec<Segment>,
     pub text: String,
 }
