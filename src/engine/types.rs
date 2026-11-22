@@ -17,11 +17,16 @@ pub struct Segment {
     pub text: String,
     pub rule_id: String,
     pub why: String,
+    /// English meaning of a Japanese segment (data/glosses.json).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gloss: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ComposeOutput {
     pub subject: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub subject_gloss: Option<String>,
     pub segments: Vec<Segment>,
     pub text: String,
 }
@@ -76,4 +81,28 @@ pub struct ScenarioMeta {
     pub label_ja: String,
     pub langs: Vec<String>,
     pub fields: Vec<FieldMeta>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct DecodeItem {
+    pub rule_id: String,
+    pub kind: String,
+    pub start: usize,
+    pub end: usize,
+    pub text: String,
+    pub plain: String,
+    pub why: String,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct DecodeSummary {
+    pub kind: String,
+    pub sentence: String,
+    pub plain: String,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct DecodeOutput {
+    pub items: Vec<DecodeItem>,
+    pub summary: Vec<DecodeSummary>,
 }

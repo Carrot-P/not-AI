@@ -256,3 +256,35 @@ fn analyzer_scenario_guesses_are_available_to_compose() {
         assert!(compose(&day_two_input(&guess.value, "client", "email")).is_ok());
     }
 }
+
+#[test]
+fn every_japanese_segment_has_an_english_gloss() {
+    let mut checked = 0;
+    for meta in not_ai::engine::list_scenarios() {
+        for recipient in ["professor", "boss", "coworker", "client"] {
+            for channel in ["email", "chat"] {
+                let Ok(out) = compose(&day_two_input(&meta.id, recipient, channel)) else {
+                    continue;
+                };
+                let glosses = out
+                    .segments
+                    .iter()
+                    .map(|s| (s.rule_id.as_str(), s.gloss.as_deref()));
+                for (id, gloss) in glosses.chain(
+                    out.subject
+                        .as_ref()
+                        .map(|_| ("subject", out.subject_gloss.as_deref())),
+                ) {
+                    let gloss = gloss.unwrap_or_else(|| panic!("{}/{id}: no gloss", meta.id));
+                    assert!(
+                        !gloss.contains('{'),
+                        "{}/{id}: unfilled placeholder in {gloss:?}",
+                        meta.id
+                    );
+                    checked += 1;
+                }
+            }
+        }
+    }
+    assert!(checked > 50, "only {checked} glosses checked");
+}

@@ -1,5 +1,6 @@
 use not_ai::engine::{
-    self, AnalyzeOutput, CheckContext, ComposeInput, ComposeOutput, Issue, ScenarioMeta,
+    self, AnalyzeOutput, CheckContext, ComposeInput, ComposeOutput, DecodeOutput, Issue,
+    ScenarioMeta,
 };
 
 #[tauri::command]
@@ -20,4 +21,9 @@ pub fn check(text: String, ctx: CheckContext) -> Vec<Issue> {
 #[tauri::command]
 pub fn analyze(received: String) -> AnalyzeOutput {
     engine::analyze(&received)
+}
+
+#[tauri::command]
+pub fn decode(received: String) -> DecodeOutput {
+    engine::decode(&received)
 }

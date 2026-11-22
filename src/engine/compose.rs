@@ -217,6 +217,7 @@ fn compose_scenario(
 
     let email = input.channel == "email";
     let mut subject = None;
+    let mut subject_gloss = None;
     let mut segments = Vec::new();
     let mut missed = Vec::new();
     let politeness = ctx.get("politeness").map_or("casual", String::as_str);
@@ -260,8 +261,10 @@ fn compose_scenario(
             2,
             &mut why,
         );
+        let g = gloss(&variant.id, scenario, input);
         if slot == "subject" {
             subject = Some(text);
+            subject_gloss = g;
         } else {
             why.append(&mut missed);
             segments.push(Segment {
@@ -269,6 +272,7 @@ fn compose_scenario(
                 text,
                 rule_id: variant.id.clone(),
                 why: why.join("; "),
+                gloss: g,
             });
         }
     }
@@ -280,9 +284,54 @@ fn compose_scenario(
         .join(if email { "\n" } else { "" });
     Ok(ComposeOutput {
         subject,
+        subject_gloss,
         segments,
         text,
     })
+}
+
+#[derive(Deserialize)]
+struct Glosses {
+    phrases: BTreeMap<String, BTreeMap<String, String>>,
+    variants: BTreeMap<String, String>,
+}
+
+/// English gloss for a Japanese variant: `{phrase}` -> phrases[phrase][selected value], `{field}` -> literal.
+fn gloss(id: &str, scenario: &Scenario, input: &ComposeInput) -> Option<String> {
+    static GLOSSES: OnceLock<Glosses> = OnceLock::new();
+    let g = GLOSSES.get_or_init(|| {
+        serde_json::from_str(include_str!(concat!(
+            env!("OUT_DIR"),
+            "/engine-data/glosses.json"
+        )))
+        .expect("invalid embedded glosses.json")
+    });
+    if input.lang != "ja" {
+        return None;
+    }
+    let template = g
+        .variants
+        .get(&format!("{}/{id}", scenario.meta.id))
+        .or_else(|| g.variants.get(id))?;
+    static PLACEHOLDER: OnceLock<Regex> = OnceLock::new();
+    let re = PLACEHOLDER.get_or_init(|| Regex::new(r"\{([^{}]+)\}").unwrap());
+    let fill = |t: &str| {
+        re.replace_all(t, |cap: &Captures<'_>| {
+            let key = &cap[1];
+            scenario
+                .phrases
+                .get(key)
+                .and_then(|p| input.fields.get(&p.by))
+                .and_then(|value| g.phrases.get(key)?.get(value))
+                .cloned()
+                .unwrap_or_else(|| input.fields.get(key).cloned().unwrap_or_default())
+        })
+        .into_owned()
+    };
+    let text = fill(&fill(template)); // second pass: phrases may contain {field}
+    let mut chars = text.chars();
+    let first = chars.next()?;
+    Some(first.to_uppercase().chain(chars).collect())
 }
 
 fn expand(

@@ -44,15 +44,38 @@ fillBtn.onclick = async () => {
     renderForm(); schedule();
   } catch (err) { receivedNote.textContent = `Analyze failed: ${err}`; }
 };
+// Decode: explain the received message (hidden requests, deadlines, soft refusals, keigo verbs).
+const KIND_LABEL = { request: 'They ask you to', deadline: 'Deadline', refusal: 'Soft no / don\'t', cushion: 'Softener', info: 'Info', honorific: 'Keigo verb' };
+const decodeBtn = el('button', { type: 'button', textContent: 'Decode message' });
+const decodeEl = el('div', { className: 'decode' });
+decodeBtn.onclick = async () => {
+  const text = receivedText.value;
+  if (!text.trim()) return;
+  try {
+    const { items, summary } = await invoke('decode', { received: text });
+    const marked = el('div', { className: 'decoded', lang: 'ja' });
+    let pos = 0; // spans are UTF-16 offsets, same as JS string indices
+    for (const i of items) {
+      marked.append(text.slice(pos, i.start), el('mark', { className: `k-${i.kind}`, textContent: text.slice(i.start, i.end), title: `${i.plain}\n${i.rule_id} · ${i.why}` }));
+      pos = i.end;
+    }
+    marked.append(text.slice(pos));
+    const list = el('ul', { className: 'decode-summary' }, ...summary.map((s) =>
+      el('li', { className: `k-${s.kind}` }, el('b', { textContent: `${KIND_LABEL[s.kind] ?? s.kind}: ` }), s.plain, el('div', { className: 'src', lang: 'ja', textContent: s.sentence }))));
+    decodeEl.replaceChildren(
+      summary.length ? el('h4', { textContent: 'What this message wants' }) : el('p', { textContent: 'No requests, deadlines or refusals found.' }), list,
+      el('h4', { textContent: `Annotated (${items.length}) — hover a highlight` }), marked);
+  } catch (err) { decodeEl.textContent = `Decode failed: ${err}`; }
+};
 composeEl.append(el('details', { className: 'received-box', open: true },
-  el('summary', { textContent: 'Received message (optional)' }), receivedText, fillBtn, receivedNote), formEl);
+  el('summary', { textContent: 'Received message (optional)' }), receivedText, fillBtn, decodeBtn, receivedNote, decodeEl), formEl);
 
 const autoBadge = (key) => {
   const g = state.auto[key];
   return g ? [el('span', { className: 'auto', textContent: 'auto', title: `「${g.evidence}」 · ${g.rule_id}` })] : [];
 };
 const outputEl = el('div', { className: 'output' });
-let seq = 0, timer = 0, last = null;
+let seq = 0, timer = 0, last = null, glossOpen = false;
 
 const current = () => state.scenarios.find((s) => s.id === state.scenario);
 // Same derivation as engine derive_context(): rank/in_group from the recipient, politeness from the first matching rule.
@@ -163,12 +186,13 @@ function renderOutput(out, issues) {
     const at = out.text.indexOf(s.text, pos);
     if (at < 0) continue;
     if (at > pos) body.append(out.text.slice(pos, at));
-    const span = el('span', { className: `segment slot-${s.slot}`, textContent: s.text, tabIndex: 0, title: s.rule_id });
+    const span = el('span', { className: `segment slot-${s.slot}`, textContent: s.text, tabIndex: 0, title: s.gloss ?? s.rule_id });
     span.onclick = span.onkeydown = (e) => {
       if (e.type === 'keydown' && e.key !== 'Enter') return;
       body.querySelectorAll('.segment.sel').forEach((n) => n.classList.remove('sel'));
       span.classList.add('sel');
-      why.replaceChildren(el('b', { textContent: 'Why? ' }), el('code', { textContent: s.rule_id }), el('div', { textContent: s.why }));
+      why.replaceChildren(el('b', { textContent: 'Why? ' }), el('code', { textContent: s.rule_id }), el('div', { textContent: s.why }),
+        ...(s.gloss ? [el('div', { className: 'gloss-line', textContent: `Meaning: ${s.gloss}` })] : []));
     };
     body.append(span);
     pos = at + s.text.length;
@@ -185,13 +209,18 @@ function renderOutput(out, issues) {
   const toEditor = el('button', { type: 'button', textContent: 'To editor' });
   toEditor.onclick = () => setEditorText(out.text);
 
+  // Per-segment English gloss (data/glosses.json); open state survives re-renders.
+  const glossed = [...(out.subject_gloss ? [['件名', out.subject_gloss]] : []), ...out.segments.filter((s) => s.gloss).map((s) => [s.text.trim(), s.gloss])];
+  const gloss = el('details', { className: 'gloss', open: glossOpen }, el('summary', { textContent: 'English meaning' }),
+    el('ol', {}, ...glossed.map(([ja, en]) => el('li', {}, el('span', { className: 'ja', lang: 'ja', textContent: ja }), el('div', { textContent: en })))));
+  gloss.ontoggle = () => { glossOpen = gloss.open; };
   const list = el('ul', { className: 'issues' }, ...issues.map((i) => el('li', { className: `sev-${i.severity}` },
     el('span', { className: 'sev', textContent: i.severity }),
     el('q', { lang: 'ja', textContent: out.text.slice(i.start, i.end) }), ` ${i.message}`,
     ...(i.suggestion ? [el('div', { className: 'sugg', textContent: `→ ${i.suggestion}` })] : []))));
   outputEl.replaceChildren(
     ...(out.subject ? [el('div', { className: 'subject', lang: 'ja' }, el('span', { className: 'lbl', textContent: '件名' }), out.subject)] : []),
-    body, el('div', { className: 'actions' }, copy, toEditor), why,
+    body, el('div', { className: 'actions' }, copy, toEditor), why, ...(glossed.length ? [gloss] : []),
     el('h3', { textContent: issues.length ? `Check: ${issues.length} issue(s)` : 'Check: no issues ✓' }), list,
   );
 }

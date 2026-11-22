@@ -92,3 +92,19 @@ textarea {
 .compose .lbl .auto { margin: 2px 0 0; }
 .seg { flex: 1; display: flex; }
 .seg button { flex: 1; padding: 5px 4px; font-size: 13px; white-space: nowrap; }
+
+/* Decode mode */
+.decode h4 { margin: .6em 0 .3em; font-size: .9em; }
+.decoded { white-space: pre-wrap; line-height: 1.9; padding: .4em; border: 1px solid #8884; border-radius: 4px; }
+.decoded mark { border-radius: 3px; padding: 0 2px; cursor: help; color: inherit; }
+.decode-summary { margin: 0; padding-left: 1.2em; }
+.decode-summary .src { opacity: .7; font-size: .85em; }
+.k-request { background: #ffd54f66; } .k-deadline { background: #ef535066; } .k-refusal { background: #ab47bc55; }
+.k-cushion { background: #90a4ae44; } .k-info { background: #4fc3f744; } .k-honorific { background: #81c78455; }
+.decode-summary li { background: none; } .decode-summary li.k-request b { color: #b8860b; }
+.decode-summary li.k-deadline b { color: #c62828; } .decode-summary li.k-refusal b { color: #8e24aa; }
+
+/* Per-segment English gloss */
+.gloss { margin-top: .6em; } .gloss summary { cursor: pointer; font-weight: 600; }
+.gloss ol { margin: .3em 0; padding-left: 1.4em; } .gloss li { margin: .25em 0; }
+.gloss .ja { opacity: .65; font-size: .85em; } .why .gloss-line { margin-top: .3em; font-style: italic; }
