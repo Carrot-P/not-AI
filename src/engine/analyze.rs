@@ -14,6 +14,9 @@ struct Rule {
     value: String,
     #[serde(deserialize_with = "deserialize_regex")]
     pattern: Regex,
+    /// Optional second pattern that must also match (Rust regex has no lookahead).
+    #[serde(default, deserialize_with = "deserialize_opt_regex")]
+    also: Option<Regex>,
     #[serde(default = "one")]
     weight: u32,
 }
@@ -24,6 +27,12 @@ fn one() -> u32 {
 
 fn deserialize_regex<'de, D: Deserializer<'de>>(d: D) -> Result<Regex, D::Error> {
     Regex::new(&String::deserialize(d)?).map_err(D::Error::custom)
+}
+
+fn deserialize_opt_regex<'de, D: Deserializer<'de>>(d: D) -> Result<Option<Regex>, D::Error> {
+    Option::<String>::deserialize(d)?
+        .map(|p| Regex::new(&p).map_err(D::Error::custom))
+        .transpose()
 }
 
 fn rules() -> &'static [Rule] {
@@ -68,6 +77,13 @@ fn analyze_with(received: &str, rules: &[Rule]) -> AnalyzeOutput {
         let Some(caps) = rule.pattern.captures(received) else {
             continue;
         };
+        if rule
+            .also
+            .as_ref()
+            .is_some_and(|also| !also.is_match(received))
+        {
+            continue;
+        }
         let mut value = String::new();
         caps.expand(&rule.value, &mut value);
         let value = value.trim().to_string();
@@ -182,6 +198,26 @@ mod tests {
         assert_eq!(get(&out, "recipient"), Some("coworker"));
         assert_eq!(get(&out, "channel"), Some("chat"));
         assert_eq!(get(&out, "scenario"), Some("lateness"));
+
+        // Instructions in English / Chinese fill the form too; no channel guess from length alone.
+        let out = analyze("tell my professor that i'll be late tomorrow");
+        assert_eq!(get(&out, "recipient"), Some("professor"));
+        assert_eq!(get(&out, "scenario"), Some("lateness"));
+        assert_eq!(get(&out, "day"), Some("tomorrow"));
+        assert_eq!(get(&out, "channel"), None);
+        let out = analyze("Slack my boss: I'm sick and can't come in today");
+        assert_eq!(get(&out, "recipient"), Some("boss"));
+        assert_eq!(get(&out, "channel"), Some("chat"));
+        assert_eq!(get(&out, "scenario"), Some("absence"));
+        assert_eq!(get(&out, "reason"), Some("illness"));
+        assert_eq!(get(&out, "day"), Some("today"));
+        let out = analyze("给客户发邮件，说明天的会议我要迟到20分钟，因为电车晚点");
+        assert_eq!(get(&out, "recipient"), Some("client"));
+        assert_eq!(get(&out, "channel"), Some("email"));
+        assert_eq!(get(&out, "scenario"), Some("lateness"));
+        assert_eq!(get(&out, "minutes"), Some("20"));
+        assert_eq!(get(&out, "reason"), Some("train_delay"));
+        assert_eq!(get(&out, "day"), Some("tomorrow"));
 
         assert_eq!(
             serde_json::to_vec(&analyze(professor)).unwrap(),

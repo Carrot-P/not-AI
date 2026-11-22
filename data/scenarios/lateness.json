@@ -55,6 +55,15 @@
       }
     },
     {
+      "key": "day",
+      "label": "When",
+      "kind": "select",
+      "options": [
+        "today",
+        "tomorrow"
+      ]
+    },
+    {
       "key": "reason",
       "label": "Reason",
       "kind": "select",
@@ -127,6 +136,14 @@
   "slots": {
     "subject": [
       {
+        "id": "subject.late.client.tomorrow",
+        "when": {
+          "day": "tomorrow",
+          "recipient": "client"
+        },
+        "ja": "【到着遅延のご連絡】明日のお打ち合わせ（{sender_company} {sender_name}）"
+      },
+      {
         "id": "subject.late.client",
         "when": {
           "recipient": "client"
@@ -147,6 +164,40 @@
       }
     ],
     "core": [
+      {
+        "id": "core.late.tomorrow.client",
+        "when": {
+          "day": "tomorrow",
+          "recipient": "client"
+        },
+        "ja": "明日のお打ち合わせですが、{reason_cause}、{minutes}分ほど遅れて{verb:到着する}。"
+      },
+      {
+        "id": "core.late.tomorrow.professor",
+        "when": {
+          "day": "tomorrow",
+          "recipient": "professor"
+        },
+        "ja": "明日の授業ですが、{reason_cause}、{minutes}分ほど遅れて{verb:到着する}。"
+      },
+      {
+        "id": "core.late.tomorrow.work",
+        "when": {
+          "day": "tomorrow",
+          "politeness": [
+            "formal",
+            "polite"
+          ]
+        },
+        "ja": "明日は{reason_cause}、{minutes}分ほど遅れて{verb:出勤する}。"
+      },
+      {
+        "id": "core.late.tomorrow.casual",
+        "when": {
+          "day": "tomorrow"
+        },
+        "ja": "明日は{reason_cause}、{minutes}分くらい遅れて行きます。"
+      },
       {
         "id": "core.late.client.oversleep",
         "when": {
