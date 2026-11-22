@@ -2,38 +2,62 @@
   {
     "id": "double_keigo.ukagau",
     "kind": "regex",
-    "pattern": "お伺いさせていただ",
+    "pattern": "お伺いさせて",
     "when": {},
     "severity": "warn",
     "message": "Double keigo: お伺い already humbles 聞く/行く; adding させていただく stacks a second humble form.",
-    "suggestion": "伺います"
+    "suggestion": "伺わせて"
   },
   {
     "id": "double_keigo.ossharu",
     "kind": "regex",
-    "pattern": "おっしゃられ",
+    "pattern": "おっしゃられま",
     "when": {},
     "severity": "warn",
     "message": "Double keigo: おっしゃる is already honorific; られ adds a second honorific.",
-    "suggestion": "おっしゃいました"
+    "suggestion": "おっしゃいま"
+  },
+  {
+    "id": "double_keigo.ossharu.other",
+    "kind": "regex",
+    "pattern": "おっしゃられ(?:[^ま]|\\z)",
+    "when": {},
+    "severity": "warn",
+    "message": "Double keigo: おっしゃる is already honorific; られ adds a second honorific."
   },
   {
     "id": "double_keigo.goran",
     "kind": "regex",
-    "pattern": "ご覧になられ",
+    "pattern": "ご覧になられま",
     "when": {},
     "severity": "warn",
     "message": "Double keigo: ご覧になる is already honorific; られ adds a second honorific.",
-    "suggestion": "ご覧になりました"
+    "suggestion": "ご覧になりま"
+  },
+  {
+    "id": "double_keigo.goran.other",
+    "kind": "regex",
+    "pattern": "ご覧になられ(?:[^ま]|\\z)",
+    "when": {},
+    "severity": "warn",
+    "message": "Double keigo: ご覧になる is already honorific; られ adds a second honorific."
   },
   {
     "id": "double_keigo.okoshi",
     "kind": "regex",
-    "pattern": "お越しになられ",
+    "pattern": "お越しになられま",
     "when": {},
     "severity": "warn",
     "message": "Double keigo: お越しになる is already honorific; られ adds a second honorific.",
-    "suggestion": "お越しになります"
+    "suggestion": "お越しになりま"
+  },
+  {
+    "id": "double_keigo.okoshi.other",
+    "kind": "regex",
+    "pattern": "お越しになられ(?:[^ま]|\\z)",
+    "when": {},
+    "severity": "warn",
+    "message": "Double keigo: お越しになる is already honorific; られ adds a second honorific."
   },
   {
     "id": "ryoukai.superior",
@@ -49,13 +73,13 @@
   {
     "id": "gokurou.superior",
     "kind": "regex",
-    "pattern": "ご苦労様",
+    "pattern": "ご苦労(様|さま)",
     "when": {
       "rank": "above"
     },
     "severity": "error",
     "message": "ご苦労様 is said by a superior to someone below them, not to a professor or boss.",
-    "suggestion": "お疲れ様です"
+    "suggestion": "お疲れ様"
   },
   {
     "id": "otsukare.outside",

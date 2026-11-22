@@ -115,13 +115,6 @@
         "ja": "{sender_company}の{sender_name}です。\n"
       },
       {
-        "id": "self_intro.client.chat",
-        "when": {
-          "recipient": "client"
-        },
-        "ja": "{sender_company}の{sender_name}です。"
-      },
-      {
         "id": "self_intro.chat",
         "when": {
           "channel": "chat"

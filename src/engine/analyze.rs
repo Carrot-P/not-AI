@@ -163,6 +163,10 @@ mod tests {
         assert_eq!(get(&out, "scenario"), Some("extension"));
         assert_eq!(get(&out, "sender_name"), Some("山田"));
         assert_eq!(get(&out, "event"), Some("データ構造"));
+        assert_eq!(get(&out, "recipient_name"), Some("佐藤"));
+        // A title followed by ordinary text on the next line is not a name.
+        let out = analyze("田中教授\n先日はご相談に乗っていただき、ありがとうございました。");
+        assert_ne!(get(&out, "recipient_name"), Some("先日"));
 
         let client = "株式会社XYZ\n山田様\n\nいつもお世話になっております。\n株式会社ABCの佐藤です。\n\n次回のお打ち合わせについて、11月25日（火）14時でご都合はいかがでしょうか。\n\n株式会社ABC\n佐藤";
         let out = analyze(client);

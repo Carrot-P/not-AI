@@ -30,7 +30,8 @@
       "kind": "text",
       "required": true,
       "show_if": {
-        "recipient": "client"
+        "recipient": "client",
+        "channel": "email"
       }
     },
     {
@@ -39,7 +40,8 @@
       "kind": "text",
       "required": true,
       "show_if": {
-        "recipient": "client"
+        "recipient": "client",
+        "channel": "email"
       }
     },
     {
@@ -48,7 +50,8 @@
       "kind": "text",
       "required": true,
       "show_if": {
-        "recipient": "professor"
+        "recipient": "professor",
+        "channel": "email"
       }
     },
     {

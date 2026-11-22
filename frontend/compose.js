@@ -35,7 +35,8 @@ fillBtn.onclick = async () => {
       else state.fields[key] = g.value;
       state.auto[key] = g;
     }
-    const n = Object.keys(state.auto).length;
+    const shown = new Set(['scenario', 'recipient', 'channel', ...(current()?.fields.filter(visible).map((f) => f.key) ?? [])]);
+    const n = Object.keys(state.auto).filter((k) => shown.has(k)).length; // a guess for a field this scenario lacks isn't shown
     receivedNote.textContent = n ? `Auto-filled ${n} item(s) — marked "auto". Hover a mark for the evidence.` : 'Nothing recognised; fill the form manually.';
     if (skipped.length) receivedNote.textContent += ` Skipped: ${skipped.map((g) => `${g.field}=${g.value}`).join(', ')}`;
     renderForm(); schedule();

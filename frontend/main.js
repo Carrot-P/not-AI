@@ -38,15 +38,6 @@ workspace.addEventListener('keydown', (event) => {
 dock.layout(workspace.clientWidth, workspace.clientHeight);
 dock.addPanel({ id: 'editor', component: 'editor', title: 'Editor', minimumWidth: 160 });
 dock.addPanel({
-  id: 'explorer',
-  component: 'explorer',
-  title: 'Explorer',
-  position: { referencePanel: 'editor', direction: 'left' },
-  initialWidth: 180,
-  minimumWidth: 100,
-  inactive: true,
-});
-dock.addPanel({
   id: 'compose', component: 'compose', title: 'Compose',
   position: { referencePanel: 'editor', direction: 'left' }, initialWidth: 340, minimumWidth: 260,
 });
