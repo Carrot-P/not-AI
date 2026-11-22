@@ -12,6 +12,30 @@ const SCENARIO_FILES: &[&str] = &[
         env!("OUT_DIR"),
         "/engine-data/scenarios/absence.json"
     )),
+    include_str!(concat!(
+        env!("OUT_DIR"),
+        "/engine-data/scenarios/meeting_request.json"
+    )),
+    include_str!(concat!(
+        env!("OUT_DIR"),
+        "/engine-data/scenarios/extension.json"
+    )),
+    include_str!(concat!(
+        env!("OUT_DIR"),
+        "/engine-data/scenarios/apology.json"
+    )),
+    include_str!(concat!(
+        env!("OUT_DIR"),
+        "/engine-data/scenarios/follow_up.json"
+    )),
+    include_str!(concat!(
+        env!("OUT_DIR"),
+        "/engine-data/scenarios/reschedule.json"
+    )),
+    include_str!(concat!(
+        env!("OUT_DIR"),
+        "/engine-data/scenarios/thanks.json"
+    )),
 ];
 
 pub(super) type Context = BTreeMap<String, String>;

@@ -28,13 +28,17 @@ jobs:
       - name: Require team data before packaging
         shell: bash
         run: |
-          for file in common.json keigo_verbs.json check_rules.json scenarios/lateness.json scenarios/absence.json; do
+          for file in common.json keigo_verbs.json check_rules.json analyze_rules.json \
+            scenarios/{lateness,absence,meeting_request,extension,apology,follow_up,reschedule,thanks}.json; do
             if [[ ! -f "data/$file" ]]; then
               echo "Missing official rule data: data/$file" >&2
               exit 1
             fi
           done
-          test -d tests/golden
+          if ! compgen -G 'tests/golden/*.json' > /dev/null; then
+            echo 'Missing team golden cases in tests/golden/' >&2
+            exit 1
+          fi
       - run: npm ci
       - run: cargo test --locked
       - uses: tauri-apps/tauri-action@v0

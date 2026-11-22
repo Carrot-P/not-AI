@@ -1,0 +1,33 @@
+{
+  "id": "follow_up",
+  "label_en": "Follow up",
+  "label_ja": "確認・フォローアップ",
+  "langs": ["ja"],
+  "fields": [
+    { "key": "sender_name", "label": "Your family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "recipient_name", "label": "Their family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "client_company", "label": "Client's company (Japanese)", "kind": "text", "required": true, "show_if": { "recipient": "client", "channel": "email" } },
+    { "key": "sender_company", "label": "Your company (Japanese)", "kind": "text", "required": true, "show_if": { "recipient": "client", "channel": "email" } },
+    { "key": "event", "label": "Course name (Japanese)", "kind": "text", "required": true, "show_if": { "recipient": "professor", "channel": "email" } },
+    { "key": "topic", "label": "What you contacted them about (Japanese)", "kind": "text", "required": true },
+    { "key": "previous_contact_date", "label": "Previous contact date (e.g. 11月25日)", "kind": "text", "required": true },
+    { "key": "season", "label": "Optional seasonal greeting", "kind": "select", "options": ["spring", "summer", "autumn", "winter"], "show_if": { "recipient": "client", "channel": "email" } }
+  ],
+  "slot_order": ["subject", "address", "greeting", "self_intro", "seasonal_greeting", "core", "closing", "signature"],
+  "slots": {
+    "subject": [{ "id": "subject.follow_up", "ja": "【ご確認のお願い】{topic}" }],
+    "self_intro": [{ "id": "self_intro.follow_up.chat", "when": { "channel": "chat" }, "skip": true }],
+    "seasonal_greeting": [
+      { "id": "greeting.season.spring", "when": { "recipient": "client", "channel": "email", "season": "spring" }, "ja": "春らしい陽気となってまいりましたが、いかがお過ごしでしょうか。" },
+      { "id": "greeting.season.summer", "when": { "recipient": "client", "channel": "email", "season": "summer" }, "ja": "暑い日が続いておりますが、いかがお過ごしでしょうか。" },
+      { "id": "greeting.season.autumn", "when": { "recipient": "client", "channel": "email", "season": "autumn" }, "ja": "秋も深まってまいりましたが、いかがお過ごしでしょうか。" },
+      { "id": "greeting.season.winter", "when": { "recipient": "client", "channel": "email", "season": "winter" }, "ja": "寒さが厳しくなってまいりましたが、いかがお過ごしでしょうか。" },
+      { "id": "greeting.season.none", "skip": true }
+    ],
+    "core": [
+      { "id": "core.follow_up.formal", "when": { "politeness": "formal" }, "ja": "{previous_contact_date}にご連絡いたしました{topic}の件につきまして、その後いかがでしょうか。お手すきの際にご確認いただけますと幸いです。" },
+      { "id": "core.follow_up.polite", "when": { "politeness": "polite" }, "ja": "{previous_contact_date}にご連絡した{topic}の件ですが、その後いかがでしょうか。" },
+      { "id": "core.follow_up.casual", "ja": "{previous_contact_date}に連絡した{topic}の件、その後どうですか？" }
+    ]
+  }
+}

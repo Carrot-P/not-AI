@@ -1,0 +1,34 @@
+{
+  "id": "meeting_request",
+  "label_en": "Request a meeting",
+  "label_ja": "打ち合わせのお願い",
+  "langs": ["ja"],
+  "fields": [
+    { "key": "sender_name", "label": "Your family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "recipient_name", "label": "Their family name", "kind": "text", "required": true, "show_if": { "channel": "email" } },
+    { "key": "client_company", "label": "Client's company (Japanese)", "kind": "text", "required": true, "show_if": { "recipient": "client", "channel": "email" } },
+    { "key": "sender_company", "label": "Your company (Japanese)", "kind": "text", "required": true, "show_if": { "recipient": "client", "channel": "email" } },
+    { "key": "event", "label": "Course name (Japanese)", "kind": "text", "required": true, "show_if": { "recipient": "professor", "channel": "email" } },
+    { "key": "topic", "label": "Meeting topic (Japanese)", "kind": "text", "required": true },
+    { "key": "meeting_day", "label": "Proposed day", "kind": "select", "options": ["today", "tomorrow", "specific_date"], "required": true },
+    { "key": "meeting_date", "label": "Proposed date (e.g. 11月25日)", "kind": "text", "required": true, "show_if": { "meeting_day": "specific_date" } },
+    { "key": "meeting_time", "label": "Proposed time (e.g. 14時)", "kind": "text", "required": true }
+  ],
+  "slot_order": ["subject", "address", "greeting", "self_intro", "core", "closing", "signature"],
+  "phrases": {
+    "meeting_day_phrase": { "by": "meeting_day", "map": {
+      "today": { "formal": "本日", "casual": "今日" },
+      "tomorrow": "明日",
+      "specific_date": "{meeting_date}"
+    } }
+  },
+  "slots": {
+    "subject": [{ "id": "subject.meeting_request", "ja": "【お打ち合わせのお願い】{topic}" }],
+    "self_intro": [{ "id": "self_intro.meeting_request.chat", "when": { "channel": "chat" }, "skip": true }],
+    "core": [
+      { "id": "core.meeting_request.formal", "when": { "politeness": "formal" }, "ja": "{topic}について、お打ち合わせの時間をいただけますでしょうか。{meeting_day_phrase}の{meeting_time}はいかがでしょうか。" },
+      { "id": "core.meeting_request.polite", "when": { "politeness": "polite" }, "ja": "{topic}について打ち合わせをお願いできますか。{meeting_day_phrase}の{meeting_time}はご都合いかがでしょうか。" },
+      { "id": "core.meeting_request.casual", "ja": "{topic}の件、{meeting_day_phrase}の{meeting_time}に打ち合わせできますか？" }
+    ]
+  }
+}

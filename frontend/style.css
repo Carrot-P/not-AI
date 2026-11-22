@@ -23,6 +23,17 @@ body { margin: 0; }
 .issue-tip button { display: block; margin-top: 6px; border: 1px solid #2e7d32; color: #2e7d32; background: #f1f8f1;
   border-radius: 4px; padding: 3px 8px; font: inherit; cursor: pointer; }
 
+/* Keep Dockview's resize handles; make the split and tab-bar boundaries visible. */
+#workspace .dockview-theme-light, #workspace.dockview-theme-light {
+  --dv-separator-border: #a8b4c2;
+  --dv-active-sash-color: #4874b4;
+  --dv-active-sash-transition-delay: 0s;
+}
+
+#workspace .dv-tabs-and-actions-container {
+  box-shadow: inset 0 -1px 0 var(--dv-separator-border);
+}
+
 textarea {
   display: block;
   background: transparent;
@@ -41,9 +52,8 @@ textarea {
 .compose .row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
 .lbl { min-width: 56px; color: #555; font-size: 12px; }
 .compose select, .compose input[type=text], .compose input[type=number] { flex: 1; width: 100%; box-sizing: border-box; padding: 5px 6px; font: inherit; }
-.seg { display: inline-flex; border: 1px solid #888; border-radius: 6px; overflow: hidden; }
-.seg button { border: 0; padding: 5px 12px; background: #fff; font: inherit; cursor: pointer; }
-.seg button + button { border-left: 1px solid #888; }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 1px; background: #888; border: 1px solid #888; border-radius: 6px; overflow: hidden; }
+.seg button { flex: 1 0 auto; border: 0; padding: 5px 10px; background: #fff; font: inherit; cursor: pointer; }
 .seg button.on { background: #1f4e9c; color: #fff; }
 .fields { border-top: 1px solid #ddd; padding-top: 10px; }
 .field { margin-bottom: 10px; }

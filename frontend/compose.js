@@ -68,8 +68,7 @@ const ctxValue = (key) => {
   if (key in state.toggles) return String(state.toggles[key]);
   return state.fields[key];
 };
-// Unknown keys (engine-derived, e.g. politeness) never hide a field: the engine is the final judge.
-const visible = (f) => Object.entries(f.show_if || {}).every(([k, v]) => ctxValue(k) === undefined || ctxValue(k) === v);
+const visible = (f) => Object.entries(f.show_if || {}).every(([k, v]) => ctxValue(k) === v);
 
 function segmented(name, options, key) {
   const group = el('div', { className: 'seg', role: 'group', ariaLabel: name });
@@ -124,8 +123,9 @@ function renderForm() {
 function buildInput() {
   const sc = current(), fields = {}, toggles = {};
   for (const f of sc.fields.filter(visible)) {
+    const value = state.fields[f.key];
     if (f.kind === 'toggle') toggles[f.key] = !!state.toggles[f.key];
-    else if ((state.fields[f.key] ?? '') !== '') fields[f.key] = String(state.fields[f.key]);
+    else if (f.kind === 'select' ? f.options.includes(value) : value) fields[f.key] = String(value);
   }
   return { scenario: sc.id, recipient: state.recipient, channel: state.channel, lang: state.lang, fields, toggles };
 }
