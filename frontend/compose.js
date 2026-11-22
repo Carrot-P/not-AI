@@ -42,8 +42,31 @@ fillBtn.onclick = async () => {
     renderForm(); schedule();
   } catch (err) { receivedNote.textContent = `Analyze failed: ${err}`; }
 };
+// Decode: explain the received message (hidden requests, deadlines, soft refusals, keigo verbs).
+const KIND_LABEL = { request: 'They ask you to', deadline: 'Deadline', refusal: 'Soft no / don\'t', cushion: 'Softener', info: 'Info', honorific: 'Keigo verb' };
+const decodeBtn = el('button', { type: 'button', textContent: 'Decode message' });
+const decodeEl = el('div', { className: 'decode' });
+decodeBtn.onclick = async () => {
+  const text = receivedText.value;
+  if (!text.trim()) return;
+  try {
+    const { items, summary } = await invoke('decode', { received: text });
+    const marked = el('div', { className: 'decoded', lang: 'ja' });
+    let pos = 0; // spans are UTF-16 offsets, same as JS string indices
+    for (const i of items) {
+      marked.append(text.slice(pos, i.start), el('mark', { className: `k-${i.kind}`, textContent: text.slice(i.start, i.end), title: `${i.plain}\n${i.rule_id} · ${i.why}` }));
+      pos = i.end;
+    }
+    marked.append(text.slice(pos));
+    const list = el('ul', { className: 'decode-summary' }, ...summary.map((s) =>
+      el('li', { className: `k-${s.kind}` }, el('b', { textContent: `${KIND_LABEL[s.kind] ?? s.kind}: ` }), s.plain, el('div', { className: 'src', lang: 'ja', textContent: s.sentence }))));
+    decodeEl.replaceChildren(
+      summary.length ? el('h4', { textContent: 'What this message wants' }) : el('p', { textContent: 'No requests, deadlines or refusals found.' }), list,
+      el('h4', { textContent: `Annotated (${items.length}) — hover a highlight` }), marked);
+  } catch (err) { decodeEl.textContent = `Decode failed: ${err}`; }
+};
 composeEl.append(el('details', { className: 'received-box', open: true },
-  el('summary', { textContent: 'Received message (optional)' }), receivedText, fillBtn, receivedNote), formEl);
+  el('summary', { textContent: 'Received message (optional)' }), receivedText, fillBtn, decodeBtn, receivedNote, decodeEl), formEl);
 
 const autoBadge = (key) => {
   const g = state.auto[key];

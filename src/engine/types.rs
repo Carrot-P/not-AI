@@ -77,3 +77,27 @@ pub struct ScenarioMeta {
     pub langs: Vec<String>,
     pub fields: Vec<FieldMeta>,
 }
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct DecodeItem {
+    pub rule_id: String,
+    pub kind: String,
+    pub start: usize,
+    pub end: usize,
+    pub text: String,
+    pub plain: String,
+    pub why: String,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct DecodeSummary {
+    pub kind: String,
+    pub sentence: String,
+    pub plain: String,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct DecodeOutput {
+    pub items: Vec<DecodeItem>,
+    pub summary: Vec<DecodeSummary>,
+}
