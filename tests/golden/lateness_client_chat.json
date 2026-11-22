@@ -1,0 +1,30 @@
+{
+  "input": {
+    "scenario": "lateness",
+    "recipient": "client",
+    "channel": "chat",
+    "lang": "ja",
+    "fields": {
+      "sender_name": "山田",
+      "recipient_name": "佐藤",
+      "client_company": "株式会社ABC",
+      "sender_company": "株式会社XYZ",
+      "reason": "train_delay",
+      "minutes": "15",
+      "day": "today"
+    },
+    "toggles": {}
+  },
+  "must_contain": [
+    "お世話になっております",
+    "到着します",
+    "少々お待ちいただけますと幸いです"
+  ],
+  "must_not_contain": [
+    "お疲れ様",
+    "了解",
+    "すみません",
+    "佐藤様\n"
+  ],
+  "expect_subject": false
+}

@@ -1,0 +1,32 @@
+{
+  "input": {
+    "scenario": "lateness",
+    "recipient": "professor",
+    "channel": "email",
+    "lang": "ja",
+    "fields": {
+      "sender_name": "山田",
+      "recipient_name": "佐藤",
+      "reason": "train_delay",
+      "event": "データ構造",
+      "day": "today",
+      "minutes": "15"
+    },
+    "toggles": {
+      "ask_handouts": true
+    }
+  },
+  "must_contain": [
+    "佐藤先生",
+    "お世話になっております",
+    "「データ構造」を履修している山田です",
+    "到着いたします",
+    "配布資料"
+  ],
+  "must_not_contain": [
+    "お疲れ様",
+    "了解",
+    "すみません"
+  ],
+  "expect_subject": true
+}

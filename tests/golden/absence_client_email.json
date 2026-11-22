@@ -1,0 +1,33 @@
+{
+  "input": {
+    "scenario": "absence",
+    "recipient": "client",
+    "channel": "email",
+    "lang": "ja",
+    "fields": {
+      "sender_name": "山田",
+      "recipient_name": "佐藤",
+      "client_company": "株式会社ABC",
+      "sender_company": "株式会社XYZ",
+      "reason": "illness",
+      "day": "today"
+    },
+    "toggles": {
+      "reschedule": true
+    }
+  },
+  "must_contain": [
+    "株式会社ABC\n佐藤様",
+    "いつもお世話になっております",
+    "出席できなくなりました",
+    "直前のご連絡となり",
+    "改めて日程をご調整いただけますと幸いです"
+  ],
+  "must_not_contain": [
+    "お疲れ様",
+    "了解",
+    "すみません",
+    "欠席いたします"
+  ],
+  "expect_subject": true
+}

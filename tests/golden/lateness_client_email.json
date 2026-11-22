@@ -1,0 +1,33 @@
+{
+  "input": {
+    "scenario": "lateness",
+    "recipient": "client",
+    "channel": "email",
+    "lang": "ja",
+    "fields": {
+      "sender_name": "山田",
+      "recipient_name": "佐藤",
+      "client_company": "株式会社ABC",
+      "sender_company": "株式会社XYZ",
+      "reason": "train_delay",
+      "minutes": "15",
+      "day": "today"
+    },
+    "toggles": {}
+  },
+  "must_contain": [
+    "株式会社ABC\n佐藤様",
+    "いつもお世話になっております",
+    "株式会社XYZの山田です",
+    "本日のお打ち合わせ",
+    "到着いたします",
+    "今しばらくお待ちいただけますと幸いです",
+    "株式会社XYZ\n山田"
+  ],
+  "must_not_contain": [
+    "お疲れ様",
+    "了解",
+    "すみません"
+  ],
+  "expect_subject": true
+}
