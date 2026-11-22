@@ -11,6 +11,11 @@ if (!window.__TAURI__) {
     if (cmd === 'list_scenarios') return scenarios;
     if (cmd === 'check') return args.text.includes('すみません')
       ? [{ rule_id: 'check.casual_apology', severity: 'warn', start: args.text.indexOf('すみません'), end: args.text.indexOf('すみません') + 5, message: '(stub) casual apology', suggestion: '申し訳ございません' }] : [];
+    if (cmd === 'decode') { // canned: highlight one known request if present
+      const t = args.received, k = 'いただけますと幸いです', at = t.indexOf(k);
+      return at < 0 ? { items: [], summary: [] } : { items: [{ rule_id: 'stub.request', kind: 'request', start: at, end: at + k.length, text: k, plain: '(stub) Please do this.', why: 'stub' }],
+        summary: [{ kind: 'request', sentence: t, plain: '(stub) Please do this.' }] };
+    }
     if (cmd === 'analyze') return { guesses: [ // canned: pretend the message is from a coworker on chat
       { field: 'recipient', value: 'coworker', evidence: 'おつかれ', rule_id: 'stub.recipient' },
       { field: 'channel', value: 'chat', evidence: '！', rule_id: 'stub.channel' },

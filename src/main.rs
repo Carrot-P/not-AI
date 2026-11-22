@@ -34,6 +34,7 @@ fn main() {
             commands::list_scenarios,
             commands::compose,
             commands::check,
+            commands::decode,
             commands::analyze
         ])
         .run(tauri::generate_context!())
