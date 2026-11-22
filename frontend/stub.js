@@ -26,7 +26,7 @@ if (!window.__TAURI__) {
     const ctx = { ...input.fields, ...input, rank: profile.rank, in_group: String(profile.in_group) };
     for (const f of sc.fields) if (f.required && Object.entries(f.show_if ?? {}).every(([k, v]) => ctx[k] === v) && !input.fields[f.key]?.trim()) throw `Missing required field: ${f.key}`;
     const formal = input.recipient !== 'coworker';
-    const seg = (slot, text, why) => ({ slot, text, rule_id: `${slot}.${formal ? 'formal' : 'casual'}`, why: `(stub) ${why}` });
+    const seg = (slot, text, why) => ({ slot, text, rule_id: `${slot}.${formal ? 'formal' : 'casual'}`, why: `(stub) ${why}`, gloss: `(stub) English meaning of the ${slot}` });
     const segments = [
       email && seg('address', `${input.fields.recipient_name}${honor[input.recipient]}`, `recipient=${input.recipient}`),
       seg('greeting', formal ? 'お疲れ様です。' : 'お疲れ様！', `politeness=${formal ? 'formal' : 'casual'}`),
