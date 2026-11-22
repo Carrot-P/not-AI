@@ -1,0 +1,31 @@
+{
+  "input": {
+    "scenario": "lateness",
+    "recipient": "boss",
+    "channel": "email",
+    "lang": "ja",
+    "fields": {
+      "sender_name": "山田",
+      "recipient_name": "佐藤",
+      "reason": "train_delay",
+      "event": "データ構造",
+      "day": "today",
+      "minutes": "15"
+    },
+    "toggles": {
+      "ask_handouts": true
+    }
+  },
+  "must_contain": [
+    "佐藤さん",
+    "お疲れ様です",
+    "出勤いたします",
+    "大変申し訳ございません"
+  ],
+  "must_not_contain": [
+    "お世話になっております",
+    "了解",
+    "すみません"
+  ],
+  "expect_subject": true
+}

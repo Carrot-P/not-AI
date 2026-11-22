@@ -1,0 +1,30 @@
+{
+  "input": {
+    "scenario": "absence",
+    "recipient": "professor",
+    "channel": "email",
+    "lang": "ja",
+    "fields": {
+      "sender_name": "山田",
+      "recipient_name": "佐藤",
+      "reason": "illness",
+      "event": "データ構造",
+      "day": "today"
+    },
+    "toggles": {
+      "ask_handouts": true
+    }
+  },
+  "must_contain": [
+    "佐藤先生",
+    "お世話になっております",
+    "欠席いたします",
+    "課題"
+  ],
+  "must_not_contain": [
+    "お疲れ様",
+    "了解",
+    "すみません"
+  ],
+  "expect_subject": true
+}
