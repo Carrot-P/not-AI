@@ -1,0 +1,29 @@
+{
+  "input": {
+    "scenario": "absence_en",
+    "recipient": "client",
+    "channel": "chat",
+    "lang": "en",
+    "fields": {
+      "sender_name": "Alex Kim",
+      "recipient_name": "Sato",
+      "event": "Data Structures",
+      "day": "today",
+      "reason": "illness"
+    },
+    "toggles": {
+      "reschedule": true
+    }
+  },
+  "must_contain": [
+    "Hello,",
+    "not be able to attend our meeting today",
+    "reschedule"
+  ],
+  "must_not_contain": [
+    "Hey",
+    "Best regards",
+    "Dear"
+  ],
+  "expect_subject": false
+}

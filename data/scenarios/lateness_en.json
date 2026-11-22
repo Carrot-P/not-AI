@@ -1,0 +1,81 @@
+{
+  "id": "lateness_en",
+  "label_en": "Running late (English)",
+  "label_ja": "遅刻の連絡（英語）",
+  "langs": ["en"],
+  "fields": [
+    {"key": "sender_name", "label": "Your name", "kind": "text", "required": true, "show_if": {"channel": "email"}},
+    {"key": "recipient_name", "label": "How you address them (e.g. Ms. Sato; professor: family name)", "kind": "text", "required": true, "show_if": {"channel": "email"}},
+    {"key": "event", "label": "Course name", "kind": "text", "required": true, "show_if": {"recipient": "professor"}},
+    {"key": "day", "label": "When", "kind": "select", "options": ["today", "tomorrow"]},
+    {"key": "reason", "label": "Reason", "kind": "select", "options": ["train_delay", "illness", "oversleep", "other"], "required": true},
+    {"key": "reason_other", "label": "Other reason (e.g. a doctor's appointment)", "kind": "text", "required": true, "show_if": {"reason": "other"}},
+    {"key": "minutes", "label": "Minutes late", "kind": "number", "required": true},
+    {"key": "ask_handouts", "label": "Ask for handouts", "kind": "toggle", "show_if": {"recipient": "professor"}}
+  ],
+  "slot_order": ["subject", "address", "greeting", "self_intro", "core", "apology", "request", "closing", "signature"],
+  "phrases": {
+    "day_word": {"by": "day", "map": {"today": "today", "tomorrow": "tomorrow"}},
+    "reason_cause": {"by": "reason", "map": {
+      "train_delay": {"formal": "because of a train delay", "casual": "my train is delayed"},
+      "illness": {"formal": "because I am feeling unwell", "casual": "I'm not feeling great"},
+      "oversleep": {"formal": "because I overslept", "casual": "I overslept"},
+      "other": {"formal": "because of {reason_other}", "casual": "{reason_other}"}
+    }}
+  },
+  "slots": {
+    "subject": [
+      {"id": "en.subject.late.professor", "when": {"recipient": "professor"}, "en": "Running late to {event} {day_word} – {sender_name}"},
+      {"id": "en.subject.late.client", "when": {"recipient": "client"}, "en": "Running late for our meeting {day_word} – {sender_name}"},
+      {"id": "en.subject.late", "en": "Running late {day_word} – {sender_name}"}
+    ],
+    "address": [
+      {"id": "en.address.chat", "when": {"channel": "chat"}, "skip": true},
+      {"id": "en.address.professor", "when": {"recipient": "professor"}, "en": "Dear Professor {recipient_name},\n"},
+      {"id": "en.address.client", "when": {"recipient": "client"}, "en": "Dear {recipient_name},\n"},
+      {"id": "en.address.internal", "en": "Hi {recipient_name},\n"}
+    ],
+    "greeting": [
+      {"id": "en.greeting.formal", "when": {"politeness": "formal", "in_group": "false"}, "en": "I hope this message finds you well."},
+      {"id": "en.greeting.email", "when": {"channel": "email"}, "skip": true},
+      {"id": "en.greeting.chat.polite", "when": {"politeness": "polite"}, "en": "Hello,"},
+      {"id": "en.greeting.chat.casual", "en": "Hey!"}
+    ],
+    "self_intro": [
+      {"id": "en.self_intro.professor", "when": {"recipient": "professor", "channel": "email"}, "en": "This is {sender_name} from your {event} class."},
+      {"id": "en.self_intro.none", "skip": true}
+    ],
+    "core": [
+      {"id": "en.core.late.professor.email", "when": {"recipient": "professor", "channel": "email"}, "en": "I am writing to let you know that I will be about {minutes} minutes late to class {day_word} {reason_cause}."},
+      {"id": "en.core.late.professor.chat", "when": {"recipient": "professor"}, "en": " I will be about {minutes} minutes late to {event} {day_word} {reason_cause}."},
+      {"id": "en.core.late.client", "when": {"recipient": "client", "channel": "email"}, "en": "I am writing to let you know that I will be about {minutes} minutes late for our meeting {day_word} {reason_cause}."},
+      {"id": "en.core.late.client.chat", "when": {"recipient": "client"}, "en": " I will be about {minutes} minutes late for our meeting {day_word} {reason_cause}."},
+      {"id": "en.core.late.work.email", "when": {"channel": "email"}, "en": "I will be about {minutes} minutes late to work {day_word} {reason_cause}."},
+      {"id": "en.core.late.work.polite", "when": {"politeness": ["formal", "polite"]}, "en": " I will be about {minutes} minutes late {day_word} {reason_cause}."},
+      {"id": "en.core.late.casual", "en": " Running about {minutes} min late – {reason_cause}."}
+    ],
+    "apology": [
+      {"id": "en.apology.formal", "when": {"politeness": "formal"}, "en": "I apologize for any inconvenience."},
+      {"id": "en.apology.polite.email", "when": {"channel": "email"}, "en": "Sorry for the inconvenience."},
+      {"id": "en.apology.polite.chat", "when": {"politeness": "polite"}, "en": " Sorry for the inconvenience."},
+      {"id": "en.apology.casual", "en": " Sorry!"}
+    ],
+    "request": [
+      {"id": "en.request.handouts.email", "when": {"recipient": "professor", "ask_handouts": "true", "channel": "email"}, "en": "If any handouts are distributed at the start of class, could I please collect them afterwards?"},
+      {"id": "en.request.handouts.chat", "when": {"recipient": "professor", "ask_handouts": "true"}, "en": " Could I pick up any handouts afterwards?"},
+      {"id": "en.request.client.email", "when": {"recipient": "client", "channel": "email"}, "en": "I will be there as soon as possible."},
+      {"id": "en.request.client.chat", "when": {"recipient": "client"}, "en": " I will be there as soon as I can."},
+      {"id": "en.request.none", "skip": true}
+    ],
+    "closing": [
+      {"id": "en.closing.formal", "when": {"politeness": "formal"}, "en": "Thank you for your understanding.\n\nBest regards,"},
+      {"id": "en.closing.email", "when": {"channel": "email"}, "en": "\nThanks,"},
+      {"id": "en.closing.chat.polite", "when": {"politeness": "polite"}, "en": " Thank you."},
+      {"id": "en.closing.chat.casual", "skip": true}
+    ],
+    "signature": [
+      {"id": "en.signature.chat", "when": {"channel": "chat"}, "skip": true},
+      {"id": "en.signature.email", "en": "{sender_name}"}
+    ]
+  }
+}

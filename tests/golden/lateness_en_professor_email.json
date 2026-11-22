@@ -1,0 +1,33 @@
+{
+  "input": {
+    "scenario": "lateness_en",
+    "recipient": "professor",
+    "channel": "email",
+    "lang": "en",
+    "fields": {
+      "sender_name": "Alex Kim",
+      "recipient_name": "Sato",
+      "event": "Data Structures",
+      "day": "today",
+      "reason": "train_delay",
+      "minutes": "15"
+    },
+    "toggles": {
+      "ask_handouts": true
+    }
+  },
+  "must_contain": [
+    "Dear Professor Sato,",
+    "This is Alex Kim from your Data Structures class.",
+    "15 minutes late",
+    "because of a train delay",
+    "handouts",
+    "Best regards,"
+  ],
+  "must_not_contain": [
+    "Hi ",
+    "Hey",
+    "Sorry!"
+  ],
+  "expect_subject": true
+}

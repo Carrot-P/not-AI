@@ -1,0 +1,87 @@
+{
+  "id": "absence_en",
+  "label_en": "Absence notice (English)",
+  "label_ja": "欠席・休みの連絡（英語）",
+  "langs": ["en"],
+  "fields": [
+    {"key": "sender_name", "label": "Your name", "kind": "text", "required": true, "show_if": {"channel": "email"}},
+    {"key": "recipient_name", "label": "How you address them (e.g. Ms. Sato; professor: family name)", "kind": "text", "required": true, "show_if": {"channel": "email"}},
+    {"key": "event", "label": "Course name", "kind": "text", "required": true, "show_if": {"recipient": "professor"}},
+    {"key": "day", "label": "When", "kind": "select", "options": ["today", "tomorrow"]},
+    {"key": "reason", "label": "Reason", "kind": "select", "options": ["illness", "family", "job_hunting", "personal", "other"], "required": true},
+    {"key": "reason_other", "label": "Other reason (e.g. a doctor's appointment)", "kind": "text", "required": true, "show_if": {"reason": "other"}},
+    {"key": "ask_handouts", "label": "Ask for handouts / homework", "kind": "toggle", "show_if": {"recipient": "professor"}},
+    {"key": "reschedule", "label": "Ask to reschedule", "kind": "toggle", "show_if": {"recipient": "client"}},
+    {"key": "reachable", "label": "Reachable if urgent", "kind": "toggle", "show_if": {"in_group": "true"}}
+  ],
+  "slot_order": ["subject", "address", "greeting", "self_intro", "core", "apology", "request", "closing", "signature"],
+  "phrases": {
+    "day_word": {"by": "day", "map": {"today": "today", "tomorrow": "tomorrow"}},
+    "reason_cause": {"by": "reason", "map": {
+      "illness": {"formal": "because I am unwell", "casual": "I'm feeling sick"},
+      "family": {"formal": "due to a family matter", "casual": "something came up with my family"},
+      "job_hunting": {"formal": "because of a job interview", "casual": "I have a job interview"},
+      "personal": {"formal": "for personal reasons", "casual": "something came up"},
+      "other": {"formal": "because of {reason_other}", "casual": "{reason_other}"}
+    }}
+  },
+  "slots": {
+    "subject": [
+      {"id": "en.subject.absence.professor", "when": {"recipient": "professor"}, "en": "Absence from {event} {day_word} – {sender_name}"},
+      {"id": "en.subject.absence.client", "when": {"recipient": "client"}, "en": "Unable to attend our meeting {day_word} – {sender_name}"},
+      {"id": "en.subject.absence", "en": "Out of office {day_word} – {sender_name}"}
+    ],
+    "address": [
+      {"id": "en.address.chat", "when": {"channel": "chat"}, "skip": true},
+      {"id": "en.address.professor", "when": {"recipient": "professor"}, "en": "Dear Professor {recipient_name},\n"},
+      {"id": "en.address.client", "when": {"recipient": "client"}, "en": "Dear {recipient_name},\n"},
+      {"id": "en.address.internal", "en": "Hi {recipient_name},\n"}
+    ],
+    "greeting": [
+      {"id": "en.greeting.formal", "when": {"politeness": "formal", "in_group": "false"}, "en": "I hope this message finds you well."},
+      {"id": "en.greeting.email", "when": {"channel": "email"}, "skip": true},
+      {"id": "en.greeting.chat.polite", "when": {"politeness": "polite"}, "en": "Hello,"},
+      {"id": "en.greeting.chat.casual", "en": "Hey!"}
+    ],
+    "self_intro": [
+      {"id": "en.self_intro.professor", "when": {"recipient": "professor", "channel": "email"}, "en": "This is {sender_name} from your {event} class."},
+      {"id": "en.self_intro.none", "skip": true}
+    ],
+    "core": [
+      {"id": "en.core.absence.professor.email", "when": {"recipient": "professor", "channel": "email"}, "en": "I am writing to let you know that I will not be able to attend class {day_word} {reason_cause}."},
+      {"id": "en.core.absence.professor.chat", "when": {"recipient": "professor"}, "en": " I will not be able to attend {event} {day_word} {reason_cause}."},
+      {"id": "en.core.absence.client.email", "when": {"recipient": "client", "channel": "email"}, "en": "I am very sorry, but I will not be able to attend our meeting {day_word} {reason_cause}."},
+      {"id": "en.core.absence.client.chat", "when": {"recipient": "client"}, "en": " I am sorry, but I will not be able to attend our meeting {day_word} {reason_cause}."},
+      {"id": "en.core.absence.boss.email", "when": {"rank": "above", "channel": "email"}, "en": "I would like to request the day off {day_word} {reason_cause}."},
+      {"id": "en.core.absence.boss.chat", "when": {"rank": "above"}, "en": " would it be all right if I took the day off {day_word} {reason_cause}?"},
+      {"id": "en.core.absence.coworker.email", "when": {"channel": "email"}, "en": "I will be off {day_word} {reason_cause}."},
+      {"id": "en.core.absence.casual", "en": " I'm taking {day_word} off – {reason_cause}."}
+    ],
+    "apology": [
+      {"id": "en.apology.client", "when": {"recipient": "client"}, "skip": true},
+      {"id": "en.apology.formal", "when": {"politeness": "formal"}, "en": "I apologize for the short notice."},
+      {"id": "en.apology.polite.email", "when": {"channel": "email"}, "en": "Sorry for the short notice."},
+      {"id": "en.apology.polite.chat", "when": {"politeness": "polite"}, "en": " Sorry for the short notice."},
+      {"id": "en.apology.casual", "en": " Sorry for the short notice!"}
+    ],
+    "request": [
+      {"id": "en.request.handouts.email", "when": {"recipient": "professor", "ask_handouts": "true", "channel": "email"}, "en": "If there are any handouts or assignments, could you please let me know?"},
+      {"id": "en.request.handouts.chat", "when": {"recipient": "professor", "ask_handouts": "true"}, "en": " Could you let me know about any handouts or assignments?"},
+      {"id": "en.request.reschedule.email", "when": {"recipient": "client", "reschedule": "true", "channel": "email"}, "en": "Would it be possible to reschedule? Please let me know a few times that work for you."},
+      {"id": "en.request.reschedule.chat", "when": {"recipient": "client", "reschedule": "true"}, "en": " Could we reschedule?"},
+      {"id": "en.request.reachable.email", "when": {"in_group": "true", "reachable": "true", "channel": "email"}, "en": "I will be reachable by phone if anything urgent comes up."},
+      {"id": "en.request.reachable.chat", "when": {"in_group": "true", "reachable": "true"}, "en": " I'm reachable by phone if anything urgent comes up."},
+      {"id": "en.request.none", "skip": true}
+    ],
+    "closing": [
+      {"id": "en.closing.formal", "when": {"politeness": "formal"}, "en": "Thank you for your understanding.\n\nBest regards,"},
+      {"id": "en.closing.email", "when": {"channel": "email"}, "en": "\nThanks,"},
+      {"id": "en.closing.chat.polite", "when": {"politeness": "polite"}, "en": " Thank you."},
+      {"id": "en.closing.chat.casual", "skip": true}
+    ],
+    "signature": [
+      {"id": "en.signature.chat", "when": {"channel": "chat"}, "skip": true},
+      {"id": "en.signature.email", "en": "{sender_name}"}
+    ]
+  }
+}

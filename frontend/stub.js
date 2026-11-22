@@ -3,7 +3,7 @@ import common from '../data/common.json';
 
 if (!window.__TAURI__) {
   const files = import.meta.glob('../data/scenarios/*.json', { eager: true, import: 'default' });
-  const scenarios = ['lateness', 'absence', 'meeting_request', 'extension', 'apology', 'follow_up', 'reschedule', 'thanks']
+  const scenarios = ['lateness', 'absence', 'meeting_request', 'extension', 'apology', 'follow_up', 'reschedule', 'thanks', 'lateness_en', 'absence_en']
     .map(id => files[`../data/scenarios/${id}.json`])
     .map(({ id, label_en, label_ja, langs, fields }) => ({ id, label_en, label_ja, langs, fields: fields.map(f => ({ options: [], ...f })) }));
   const honor = { professor: '先生', boss: 'さん', coworker: 'さん', client: '様' };

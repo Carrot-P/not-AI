@@ -1,0 +1,28 @@
+{
+  "input": {
+    "scenario": "lateness_en",
+    "recipient": "coworker",
+    "channel": "chat",
+    "lang": "en",
+    "fields": {
+      "sender_name": "Alex Kim",
+      "recipient_name": "Sato",
+      "event": "Data Structures",
+      "day": "today",
+      "reason": "train_delay",
+      "minutes": "15"
+    },
+    "toggles": {}
+  },
+  "must_contain": [
+    "Hey!",
+    "15 min late",
+    "Sorry!"
+  ],
+  "must_not_contain": [
+    "Dear",
+    "Best regards",
+    "I apologize"
+  ],
+  "expect_subject": false
+}
