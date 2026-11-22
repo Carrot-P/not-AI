@@ -6,7 +6,7 @@ Contract version: v1 (team plan doc, section 2: https://claude.ai/artifact/FwSjU
 | Celia | Engine + Tauri | Day 2 integrated: eight JP scenarios, client, date/season rules | `src/engine/compose.rs`, `data/`, `frontend/`, `tests/golden.rs`, `.github/workflows/release.yml` | Team golden cases and macOS release run pending | Day 2 integration |
 | Xin | JP data + analyzer | Day 2 done: `client`, `extension`, `reschedule`, `thanks`, and `analyze()` with 47 weighted regex rules. All three scenarios are registered in the engine. | `data/`, `src/engine/analyze.rs`, `src/engine/mod.rs` | - | 2026-11-21 18:28 JST |
 | Zine | Frontend | Day 2 pushed: Editor inline highlights with suggestions, received-message box with form prefill and evidence badges, recipients loaded from JSON | `frontend/` | - | 2026-11-21 18:55 JST |
-| Thomas | Tests + pitch + submission | doing | `tests/golden/*.json`, `README.md`, `docs/` | - | 13:20 |
+| Thomas | Tests + pitch + submission | Golden cases + README in PR #2 (Xin-reviewed). `docs/demo.md` + `docs/devpost.md` in docs PR. ⚠ Demo blocker: analyzer → reschedule reply fails `Missing required field: client_company` (see demo.md). Next: `*_en.json`, slides, DevPost page | `tests/golden/*.json`, `README.md`, `docs/` | - | 2026-11-22 14:22 JST |
 
 ## Celia — verification
 - Local meeting request, apology, and seasonal follow-up coexist with Xin’s client/address rules, deadline extension, rescheduling, thank-you scenarios and analyzer. Extension uses Xin's field names so it stays compatible with analyzer guesses.
