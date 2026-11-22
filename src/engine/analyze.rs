@@ -183,6 +183,19 @@ mod tests {
         // A title followed by ordinary text on the next line is not a name.
         let out = analyze("田中教授\n先日はご相談に乗っていただき、ありがとうございました。");
         assert_ne!(get(&out, "recipient_name"), Some("先日"));
+        // Company names: department dropped, (株)/商事 forms, space instead of の.
+        for (msg, company) in [
+            ("株式会社XYZ 営業部\n山田様\n\nお世話になっております。株式会社ABC営業部の田中です。", "株式会社ABC"),
+            ("山田様\nお世話になっております。ABC商事の田中です。", "ABC商事"),
+            ("(株)ABCの田中です。", "(株)ABC"),
+            ("株式会社ABC 田中です。いつもお世話になっております。", "株式会社ABC"),
+        ] {
+            let out = analyze(msg);
+            assert_eq!(get(&out, "client_company"), Some(company), "{msg}");
+            assert_eq!(get(&out, "recipient_name"), Some("田中"), "{msg}");
+        }
+        let out = analyze("株式会社XYZ 営業部\n山田様\n\nお世話になっております。");
+        assert_eq!(get(&out, "sender_company"), Some("株式会社XYZ"));
 
         let client = "株式会社XYZ\n山田様\n\nいつもお世話になっております。\n株式会社ABCの佐藤です。\n\n次回のお打ち合わせについて、11月25日（火）14時でご都合はいかがでしょうか。\n\n株式会社ABC\n佐藤";
         let out = analyze(client);
