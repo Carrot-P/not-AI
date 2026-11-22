@@ -16,8 +16,8 @@ Writing is about 40% of work-related ChatGPT messages (OpenAI, *How People Use C
 No ML models, AI APIs or trained tokenizers (no MeCab/kuromoji, spaCy, LanguageTool). All behaviour comes from JSON rule files in `data/`. The output is deterministic, the app runs offline (airplane mode), and the repo contains no model files.
 
 ## Libraries
-- Rust: [tauri 2](https://tauri.app), serde, serde_json, regex (build: tauri-build)
-- Frontend: [Vite](https://vitejs.dev), [Dockview](https://dockview.dev)
+- Rust: tauri 2, serde, serde_json, regex (build: tauri-build)
+- Frontend: Vite, Dockview
 
 ## Run
 Requires Rust (stable) and Node.js, plus the Tauri 2 system prerequisites.
@@ -33,7 +33,7 @@ npx vite frontend   # UI only in a browser (stubbed engine), localhost:5173
 `src/engine/` rule engine (compose, keigo, check, analyze, decode; no Tauri dependency) · `data/` scenarios and rule JSON · `frontend/` HTML/JS UI.
 
 ## Team
-Celia (engine, Tauri, release) · Xin (Japanese content, analyzer) · Zine (frontend) · Thomas (tests, pitch, submission). Built with help from Claude for coding. The product itself uses no AI.
+Celia, Xin. Built with help from Claude. The product itself uses no AI.
 
 ## License
 [GPL-3.0-only](LICENSE)
